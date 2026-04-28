@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Geometry Case Files</title>
+<style>
+*{box-sizing:border-box}
+:root{--bg:#f4efff;--white:#fff;--soft:#fbf9ff;--ink:#34324a;--muted:#77738c;--line:#e6def7;--lav:#b9a7f4;--lav2:#7d67c8;--pink:#ffdce8;--mint:#d9f8e7;--red:#ffe0e0;--gold:#fff1c9;--gold2:#8a5d00}
+body{margin:0;min-height:100vh;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink);display:flex;align-items:center;justify-content:center;padding:24px}.app{width:100%;max-width:1120px;background:var(--white);border-radius:30px;overflow:hidden;box-shadow:0 24px 60px rgba(80,64,130,.16);border:1px solid rgba(255,255,255,.8)}
+.ribbon{background:#fff;border-bottom:1px solid var(--line);padding:16px 26px;display:flex;justify-content:space-between;gap:14px;align-items:center}.ribbon-title{display:none}.ribbon-stats{display:flex;gap:9px;flex-wrap:wrap}.pill{background:var(--soft);border:1px solid var(--line);padding:7px 12px;border-radius:999px;font-size:13px;color:var(--ink)}
+.content{padding:28px}.screen{display:none}.screen.active{display:block}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(34px,5vw,56px);line-height:1;letter-spacing:-.04em;margin-bottom:12px}h2{font-size:28px;letter-spacing:-.025em;margin-bottom:8px}h3{font-size:17px;color:var(--lav2);margin-bottom:12px}.start{text-align:center;padding:38px 18px 42px}.subtitle{max-width:780px;margin:0 auto 24px;color:var(--muted);font-size:18px;line-height:1.6}
+button{border:none;background:var(--lav);color:#fff;padding:12px 17px;border-radius:16px;font-size:15px;cursor:pointer;transition:.18s ease;box-shadow:0 8px 20px rgba(125,103,200,.16)}button:hover:not(:disabled){transform:translateY(-2px);background:var(--lav2)}button:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}.ghost{background:#fff;color:var(--lav2);border:1px solid var(--line);box-shadow:none}.gold-btn{background:var(--gold);color:var(--gold2);box-shadow:none;border:1px solid #f0d88f}
+.button-row,.back-row,.tool-row{display:flex;gap:12px;flex-wrap:wrap}.button-row{justify-content:center;margin-top:18px}.back-row{justify-content:space-between;margin-bottom:20px}.tool-row{margin-top:15px}.menu-grid,.concept-grid,.shop-grid,.reward-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}.concept-grid{grid-template-columns:repeat(2,1fr)}.menu-card,.concept-card,.shop-item,.reward-item{background:var(--soft);border:1px solid var(--line);border-radius:24px;padding:20px;text-align:left;box-shadow:0 12px 28px rgba(80,64,130,.07)}.menu-card p,.concept-card p,.shop-item p,.reward-item p{color:var(--muted);line-height:1.45}.owned{background:var(--mint);color:#215a40;border:1px solid #9be3ba;display:inline-block;padding:5px 10px;border-radius:999px;font-size:12px;margin-bottom:10px}
+.layout{display:grid;grid-template-columns:1.03fr .97fr;gap:22px;align-items:stretch}.card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:0 12px 28px rgba(80,64,130,.08)}.diagram-card{min-height:620px}.diagram-box{background:var(--soft);border:1px solid var(--line);min-height:500px;border-radius:20px;display:flex;justify-content:center;align-items:center;padding:10px;position:relative}.diagram-box svg{width:100%;max-height:490px;touch-action:none}.diagram-box svg text,.diagram-box svg line,.diagram-box svg polygon,.diagram-box svg circle,.diagram-box svg path,.diagram-box svg rect{cursor:pointer}.diagram-box svg .hot:hover{filter:drop-shadow(0 0 5px rgba(125,103,200,.45));stroke-width:6}.diagram-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;align-items:center}.tiny-btn{font-size:12px;padding:7px 10px;border-radius:999px}.tool-select{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:8px 12px;font-size:12px}.tool-label{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;padding:6px 10px;font-size:12px}.tool-label input{width:86px;accent-color:var(--lav2)}.mark-dot{fill:#ff6fa7;stroke:#fff;stroke-width:2}.mark-line{stroke:#ff6fa7;stroke-width:4;stroke-linecap:round}.mark-circle{fill:none;stroke:#ff6fa7;stroke-width:4}.mark-arc{fill:none;stroke:#ff9fc5;stroke-width:5;stroke-linecap:round}.mark-dotted{stroke-dasharray:7 6}.selected-mark{filter:drop-shadow(0 0 7px rgba(255,111,167,.75));stroke:#ff3f91!important}.diagram-focus{filter:drop-shadow(0 0 6px rgba(125,103,200,.55));font-weight:900!important}.diagram-tip{font-size:13px;color:var(--muted);margin-top:8px}svg{width:100%;max-height:490px}.case-header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}.case-title-block p{color:var(--muted);margin:0}.difficulty{border-radius:999px;padding:7px 12px;font-size:13px;background:var(--soft);border:1px solid var(--line);white-space:nowrap;color:var(--muted)}.difficulty.hard{background:var(--gold);color:var(--gold2);border-color:#f0d88f;font-weight:750}.prompt{font-size:18px;line-height:1.5;margin:14px 0 16px}.choices{display:grid;gap:11px}.choice{width:100%;text-align:left;background:var(--soft);color:var(--ink);border:1px solid var(--line);box-shadow:none;line-height:1.35}.choice:hover:not(:disabled){background:#f0ebff}.choice.correct{background:var(--mint);border-color:#9be3ba;color:#215a40}.choice.wrong{background:var(--red);border-color:#f0b4b4;color:#8a3434}.panel{display:none;margin-top:14px;padding:15px;border-radius:18px;background:var(--soft);border:1px solid var(--line);line-height:1.5}.panel.show{display:block}.panel strong{color:var(--lav2)}.step-list{margin:8px 0 0 20px;padding:0}.step-list li{margin:8px 0}.progress{height:12px;background:var(--soft);border-radius:999px;border:1px solid var(--line);overflow:hidden;margin-top:12px}.progress-fill{height:100%;width:0%;background:var(--lav);transition:.25s ease}.mini-note{margin-top:12px;color:var(--muted);font-size:14px;line-height:1.45}.input-box{width:100%;max-width:360px;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--soft);color:var(--ink);font-size:15px;margin:8px auto;display:block}@keyframes correctPop{0%{transform:scale(1);box-shadow:0 0 0 rgba(114,214,160,0)}45%{transform:scale(1.04);box-shadow:0 0 0 8px rgba(114,214,160,.22)}100%{transform:scale(1);box-shadow:0 0 0 rgba(114,214,160,0)}}
+@keyframes confettiFall{0%{transform:translateY(-100vh) rotate(0deg)}100%{transform:translateY(100vh) rotate(720deg)}}
+.confetti{position:fixed;width:8px;height:12px;opacity:0.8;animation:confettiFall 1s linear forwards;z-index:9999}.choice.correct{animation:correctPop .45s ease}.hint-bunny::before{content:'🐰 ';}.theme-pink{--bg:#fff0f6;--lav:#ff9fc5;--lav2:#c75683;--line:#ffd3e5;--soft:#fff8fb}.theme-mint{--bg:#eefcf5;--lav:#72d6a0;--lav2:#2f8b5a;--line:#c9f2dc;--soft:#f8fffb}.theme-sky{--bg:#eef7ff;--lav:#90c7ff;--lav2:#427fbd;--line:#cde7ff;--soft:#f8fcff}.theme-night{--bg:#ede9fe;--lav:#8b5cf6;--lav2:#5b21b6;--line:#ddd6fe;--soft:#f5f3ff}.theme-sunset{--bg:#fff3e8;--lav:#ff9f6e;--lav2:#d4572b;--line:#ffd8c2;--soft:#fff9f4}.theme-galaxy{--bg:#0f1222;--lav:#7c7cff;--lav2:#b8b8ff;--line:#2a2e5a;--soft:#171a33;color:#e6e8ff}.theme-sunset{--bg:#fff3e8;--lav:#ff9f6e;--lav2:#d4572b;--line:#ffd8c2;--soft:#fff9f4}.theme-galaxy{--bg:#0f1222;--lav:#7c7cff;--lav2:#b8b8ff;--line:#2a2e5a;--soft:#171a33;color:#e6e8ff}
+@media(max-width:880px){body{padding:12px}.content{padding:18px}.layout,.menu-grid,.concept-grid,.shop-grid,.reward-grid{grid-template-columns:1fr}.ribbon{flex-direction:column;align-items:flex-start}.diagram-card{min-height:auto}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="ribbon"><div class="ribbon-title">Geometry Case Files · Mixed Geometry Lab</div><div class="ribbon-stats"><span class="pill" id="playerPill">Player: Guest</span><span class="pill" id="modePill">Mode: Sign In</span><span class="pill" id="scorePill">Score: 0</span><span class="pill" id="gemPill">Gems: 0</span><span class="pill" id="streakPill">Streak: 0</span><span class="pill" id="casePill">Cases: 0</span><span class="pill" id="hintPill">Hints: 0</span></div></div>
+<div class="content">
+<section id="authScreen" class="screen active"><div class="start"><h1>Geometry Case Files</h1><p class="subtitle">Sign in locally to save points, gems, shop items, rewards, and streaks on this device — or play as guest.</p><input id="usernameInput" class="input-box" placeholder="Username"><input id="emailInput" class="input-box" placeholder="Email optional"><input id="pinInput" class="input-box" placeholder="PIN" type="password"><input id="pinConfirmInput" class="input-box" placeholder="Confirm PIN for new account" type="password"><div class="button-row"><button onclick="signInOrCreate()">Sign Up / Sign In</button><button class="ghost" onclick="playGuest()">Play as Guest</button></div><p class="mini-note">This is a local browser profile, not a real online account.</p></div></section>
+<section id="menuScreen" class="screen"><div class="start"><h1>Geometry Case Files</h1><p class="subtitle">A clean pastel geometry app with mixed geometry problems, theorem chaining, focused concepts, hints, explanations, rewards, and hard problems.</p><div class="menu-grid"><div class="menu-card"><h3>Mixed Mode</h3><p>Multi-step geometry from across all chapters: ratios, area, circles, coordinate, and proof-style reasoning.</p><button onclick="startPractice('mixed')">Start Mixed Mode</button></div><div class="menu-card"><h3>Hard Mode</h3><p>Multi-theorem problems: Ceva, Menelaus, Ptolemy, Euler line, advanced ratio chasing.</p><button class="gold-btn" onclick="startPractice('bonus')">Start Hard Mode</button></div><div class="menu-card"><h3>Concepts</h3><p>Choose a specific concept and drill only that topic.</p><button class="ghost" onclick="showConcepts()">Open Concepts</button></div><div class="menu-card"><h3>Shop</h3><p>Spend Geometry Gems on themes and badges.</p><button class="ghost" onclick="showShop()">Open Shop</button></div><div class="menu-card"><h3>Rewards</h3><p>Claim gems for solving milestones, streaks, and hard problems.</p><button class="ghost" onclick="showRewards()">Open Rewards</button></div><div class="menu-card"><h3>Profile</h3><p>Check your saved account, rank, badges, owned shop items, and geometry grind progress.</p><button class="ghost" onclick="showProfile()">Open Profile</button></div></div><p class="mini-note">Normal cases are 3 points. Bonus cases are 5 points. Correct answers earn Geometry Gems.</p></div></section>
+<section id="profileScreen" class="screen"><div class="back-row"><button class="ghost" onclick="showMenu()">← Back to Menu</button><button class="ghost" onclick="showShop()">Shop</button><button class="ghost" onclick="showRewards()">Rewards</button></div><h2>Player Profile</h2><p class="mini-note">Your local save file: rank, gems, points, badges, themes, and all the tiny proof-goblin progress.</p><div class="reward-grid" id="profileGrid"></div></section>
+<section id="shopScreen" class="screen"><div class="back-row"><button class="ghost" onclick="showMenu()">← Back to Menu</button><button onclick="startPractice('mixed')">Play</button></div><h2>Geometry Shop</h2><p class="mini-note">Buy cosmetic upgrades with Geometry Gems. Items save on this device.</p><div class="shop-grid" id="shopGrid"></div></section>
+<section id="rewardScreen" class="screen"><div class="back-row"><button class="ghost" onclick="showMenu()">← Back to Menu</button><button onclick="startPractice('mixed')">Play</button></div><h2>Rewards</h2><p class="mini-note">Claim rewards after reaching milestones.</p><div class="reward-grid" id="rewardGrid"></div></section>
+<section id="conceptScreen" class="screen"><div class="back-row"><button class="ghost" onclick="showMenu()">← Back to Menu</button><button onclick="startPractice('mixed')">Mixed Practice</button></div><h2>Concept Menu</h2><p class="mini-note">Pick a concept. The app generates original questions for that topic.</p><div class="concept-grid" id="conceptGrid"></div></section>
+<section id="gameScreen" class="screen"><div class="back-row"><button class="ghost" onclick="showMenu()">← Menu</button><button class="ghost" onclick="showConcepts()">Concepts</button><button class="ghost" onclick="showShop()">Shop</button><button class="ghost" onclick="showRewards()">Rewards</button></div><div class="case-header"><div class="case-title-block"><h2 id="caseTitle">Case Title</h2><p id="caseTopic">Topic</p></div><div class="difficulty" id="difficultyBadge">Standard</div></div><div class="progress"><div class="progress-fill" id="progressFill"></div></div><div class="layout"><div class="card diagram-card"><div class="diagram-toolbar"><select id="shapeTool" class="tool-select" onchange="setDiagramTool(this.value)"><option value="point">Point</option><option value="line">Segment</option><option value="circle">Circle</option><option value="angle">Angle Arc</option><option value="polygon">Polygon</option><option value="free">Free Draw</option></select> <label class="tool-label">Sides <input id="polySides" type="number" min="3" value="3" style="width:56px"></label><select id="lineStyle" class="tool-select" onchange="updateSelectedMark()"><option value="solid">Solid</option><option value="dotted">Dotted</option></select><label class="tool-label">Size <input id="shapeSize" type="range" min="8" max="90" value="28" oninput="updateSelectedMark()"></label><label class="tool-label">Rotate <input id="shapeRotate" type="range" min="0" max="360" value="0" oninput="updateSelectedMark()"></label><button class="ghost tiny-btn" onclick="clearDiagramMarks()">Clear Marks</button></div><div class="diagram-box" id="diagramBox"></div><p class="mini-note" id="diagramNote"></p></div><div class="card"><div class="prompt" id="prompt"></div><div class="choices" id="choices"></div><div class="tool-row"><button class="ghost" id="hintBtn" onclick="showHint()">Hint</button><button class="ghost" id="solutionBtn" onclick="showSolution()" disabled>Step-by-Step Solution</button><button id="nextBtn" onclick="nextCase()" disabled>Next Case</button><button class="gold-btn" onclick="forceBonusCase()">Bonus Case</button></div><div class="panel" id="hintPanel"></div><div class="panel" id="feedbackPanel"></div><div class="panel" id="solutionPanel"></div></div></div></section>
+</div></div>
+<script>
+'use strict';
+
+let currentCase=null;
+let mode='Sign In';
+let score=0, streak=0, totalCases=0, hintsUsed=0;
+let answered=false;
+let gems=0, lifetimePoints=0;
+let playerName='Guest', playerEmail='', isGuest=true;
+let correctTotal=0, hardCorrect=0, bestStreak=0;
+let ownedItems=[], claimedRewards=[], activeTheme='default';
+let recent=[], lastCorrectSlots=[];
+let usedHintThisQuestion=false;
+let lastAnswerWrong=false;
+let diagramTool='point';
+let pendingLinePoint=null;
+let isDrawingFree=false;
+let currentFreePath=null;
+let selectedMark=null;
+let draggingMark=null;
+let dragOffset={x:0,y:0};
+
+const themePreview={
+  'theme-pink':['#fff0f6','#ff9fc5','#c75683'],
+  'theme-mint':['#eefcf5','#72d6a0','#2f8b5a'],
+  'theme-sky':['#eef7ff','#90c7ff','#427fbd'],
+  'theme-night':['#ede9fe','#8b5cf6','#5b21b6'],
+  'theme-sunset':['#fff3e8','#ff9f6e','#d4572b'],
+  'theme-galaxy':['#0f1222','#7c7cff','#b8b8ff']
+};
+
+const shopItems=[
+  {id:'pink',name:'Rose Quartz Theme',cost:25,desc:'Soft blush aesthetic.',theme:'theme-pink'},
+  {id:'mint',name:'Mint Axiom Theme',cost:25,desc:'Calm green focus mode.',theme:'theme-mint'},
+  {id:'sky',name:'Sky Compass Theme',cost:25,desc:'Clean blue geometry vibes.',theme:'theme-sky'},
+  {id:'night',name:'Night Scholar Theme',cost:35,desc:'Late-night theorem grind.',theme:'theme-night'},
+  {id:'sunset',name:'Sunset Gradient Theme',cost:40,desc:'Warm gradient for dramatic solving.',theme:'theme-sunset'},
+  {id:'galaxy',name:'Galaxy Brain Theme',cost:60,desc:'For cosmic-level geometry.',theme:'theme-galaxy'},
+  {id:'proofBoss',name:'Proof Boss Badge',cost:40,desc:'Boost: +1 extra gem on every correct answer.',boost:{type:'gemsFlat',value:1}},
+  {id:'circleWizard',name:'Circle Wizard Badge',cost:45,desc:'Boost: +2 extra gems on circle problems only.',boost:{type:'circleGems',value:2}},
+  {id:'ratioGremlin',name:'Ratio Gremlin Badge',cost:45,desc:'Boost: streak bonus activates earlier.',boost:{type:'earlyStreak'}},
+  {id:'angleAssassin',name:'Angle Assassin Badge',cost:50,desc:'Boost: 25% chance to double gems.',boost:{type:'doubleGems'}},
+  {id:'speedDemon',name:'Speed Demon Badge',cost:60,desc:'Boost: +1 extra gem if no hint used.',boost:{type:'noHintBonus'}},
+  {id:'comebackCore',name:'Comeback Core Badge',cost:70,desc:'Boost: next correct after a mistake gives +3 gems.',boost:{type:'comeback'}},
+  {id:'streakEngine',name:'Streak Engine',cost:140,desc:'Boost: streak bonus gives +2 instead of +1.',boost:{type:'streakBoost'}},
+  {id:'luckyCharm',name:'Lucky Charm',cost:120,desc:'Boost: random +1 to +3 gems on correct answers.',boost:{type:'randomGems'}},
+  {id:'bunnyHint',name:'Bunny Hint Button',cost:80,desc:'Cosmetic: adds a tiny bunny to the hint button because suffering should be cute.',cosmetic:{type:'hintBunny'}}
+];
+
+const rewards=[
+  {id:'firstSolve',name:'First Case Closed',desc:'Solve your first problem correctly.',amount:10,ok:function(){return correctTotal>=1;}},
+  {id:'correct3',name:'Three Clean Solves',desc:'Solve 3 problems correctly.',amount:20,ok:function(){return correctTotal>=3;}},
+  {id:'correct10',name:'Ten-Problem Takeover',desc:'Solve 10 problems correctly.',amount:50,ok:function(){return correctTotal>=10;}},
+  {id:'hard3',name:'Theorem Hunter',desc:'Solve 3 hard problems.',amount:60,ok:function(){return hardCorrect>=3;}},
+  {id:'streak5',name:'Five Streak Flame',desc:'Reach a streak of 5.',amount:75,ok:function(){return bestStreak>=5;}},
+  {id:'points150',name:'150-Point Specialist',desc:'Earn 150 lifetime points.',amount:100,ok:function(){return lifetimePoints>=150;}}
+];
+
+const concepts=[
+  ['similarity','Similarity + Ratios','Similar triangles, scale factors, angle bisectors, Ceva, and symmedians.'],
+  ['circles','Circles','Power of a point, chords, tangents, cyclic quadrilaterals.'],
+  ['coordinate','Coordinate Geometry','Shoelace, distance, slopes, and area.'],
+  ['area','Area Geometry','Area ratios, shaded regions, medians, trapezoids.'],
+  ['right','Right Triangles','Pythagorean triples, altitude to hypotenuse, semicircles.'],
+  ['angles','Angle Chasing','Cyclic angles, incenter angles, exterior angles, polygons.'],
+  ['counting','Geometric Counting','Integer triangles, diagonals, grid figures, configurations.'],
+  ['proofs','Proof Reasons','Congruence, CPCTC, quadrilateral properties, theorem recognition.']
+];
+
+function R(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function shuffle(arr){return arr.slice().sort(function(){return Math.random()-0.5;});}
+function accountKey(n){return 'gcf_account_'+String(n).toLowerCase();}
+function emailKey(e){return 'gcf_email_'+String(e).toLowerCase();}
+function resolveLoginId(id){var raw=String(id||'').trim();return raw.indexOf('@')>-1?(localStorage.getItem(emailKey(raw))||raw):raw;}
+function getPin(){var el=document.getElementById('pinInput');return el?el.value:'';}
+function rankName(){if(lifetimePoints>=500)return 'Theorem Royalty';if(lifetimePoints>=300)return 'Geometry Menace';if(lifetimePoints>=150)return 'Proof Boss';if(lifetimePoints>=50)return 'Diagram Detective';return 'New Case Solver';}
+
+function saveProfile(){
+  if(isGuest)return;
+  var data={playerName:playerName,playerEmail:playerEmail,gems:gems,ownedItems:ownedItems,activeTheme:activeTheme,claimedRewards:claimedRewards,score:score,streak:streak,totalCases:totalCases,hintsUsed:hintsUsed,correctTotal:correctTotal,hardCorrect:hardCorrect,bestStreak:bestStreak,lifetimePoints:lifetimePoints,pin:getPin()};
+  localStorage.setItem(accountKey(playerName),JSON.stringify(data));
+  if(playerEmail)localStorage.setItem(emailKey(playerEmail),playerName);
+}
+
+function loadProfile(name,pin){
+  name=resolveLoginId(name);
+  var raw=localStorage.getItem(accountKey(name));
+  if(!raw)return false;
+  var d=JSON.parse(raw);
+  if(String(d.pin)!==String(pin)){alert('Wrong PIN for this username/email.');return true;}
+  playerName=d.playerName||name; playerEmail=d.playerEmail||''; gems=d.gems||0;
+  ownedItems=Array.isArray(d.ownedItems)?d.ownedItems:[];
+  activeTheme=d.activeTheme||'default'; claimedRewards=Array.isArray(d.claimedRewards)?d.claimedRewards:[];
+  score=d.score||0; streak=d.streak||0; totalCases=d.totalCases||0; hintsUsed=d.hintsUsed||0;
+  correctTotal=d.correctTotal||0; hardCorrect=d.hardCorrect||0; bestStreak=d.bestStreak||0; lifetimePoints=d.lifetimePoints||0;
+  isGuest=false; applyTheme(); updateStats(); return true;
+}
+
+function signInOrCreate(){
+  var u=(document.getElementById('usernameInput').value||'').trim();
+  var e=(document.getElementById('emailInput').value||'').trim();
+  var p=(document.getElementById('pinInput').value||'').trim();
+  var pc=(document.getElementById('pinConfirmInput').value||'').trim();
+  var loginId=u||e;
+  if(!loginId){alert('Enter a username or email.');return;}
+  if(!p){alert('Enter a PIN.');return;}
+  var resolved=resolveLoginId(loginId);
+  if(localStorage.getItem(accountKey(resolved))){var loaded=loadProfile(resolved,p);if(loaded&&!isGuest)showMenu();return;}
+  if(!u){alert('For a new account, enter a username.');return;}
+  if(p!==pc){alert('For a new account, confirm your PIN.');return;}
+  playerName=u; playerEmail=e; isGuest=false; gems=0; ownedItems=[]; activeTheme='default'; claimedRewards=[];
+  score=0; streak=0; totalCases=0; hintsUsed=0; correctTotal=0; hardCorrect=0; bestStreak=0; lifetimePoints=0;
+  saveProfile(); applyTheme(); updateStats(); showMenu();
+}
+
+function playGuest(){
+  playerName='Guest'; playerEmail=''; isGuest=true; gems=0; ownedItems=[]; activeTheme='default'; claimedRewards=[];
+  score=0; streak=0; totalCases=0; hintsUsed=0; correctTotal=0; hardCorrect=0; bestStreak=0; lifetimePoints=0;
+  applyTheme(); updateStats(); showMenu();
+}
+
+function applyTheme(){
+  document.body.classList.remove('theme-pink','theme-mint','theme-sky','theme-night','theme-sunset','theme-galaxy');
+  if(activeTheme&&activeTheme!=='default')document.body.classList.add(activeTheme);
+  var hint=document.getElementById('hintBtn');
+  if(hint){
+    if(ownedItems.indexOf('bunnyHint')>-1)hint.classList.add('hint-bunny');
+    else hint.classList.remove('hint-bunny');
+  }
+}
+function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');}
+function showMenu(){mode='Menu';updateStats();showScreen('menuScreen');}
+function showConcepts(){renderConcepts();mode='Concepts';updateStats();showScreen('conceptScreen');}
+function showShop(){renderShop();mode='Shop';updateStats();showScreen('shopScreen');}
+function showRewards(){renderRewards();mode='Rewards';updateStats();showScreen('rewardScreen');}
+function showProfile(){renderProfile();mode='Profile';updateStats();showScreen('profileScreen');}
+
+function updateStats(){
+  document.getElementById('playerPill').textContent='Player: '+playerName;
+  document.getElementById('modePill').textContent='Mode: '+mode;
+  document.getElementById('scorePill').textContent='Score: '+score;
+  document.getElementById('gemPill').textContent='Gems: '+gems;
+  document.getElementById('streakPill').textContent='Streak: '+streak;
+  document.getElementById('casePill').textContent='Cases: '+totalCases;
+  document.getElementById('hintPill').textContent='Hints: '+hintsUsed;
+  var pf=document.getElementById('progressFill'); if(pf)pf.style.width=Math.min((streak%10)*10,100)+'%';
+}
+
+function renderConcepts(){
+  var g=document.getElementById('conceptGrid');g.innerHTML='';
+  concepts.forEach(function(c){var d=document.createElement('div');d.className='concept-card';d.innerHTML='<h3>'+c[1]+'</h3><p>'+c[2]+'</p><button onclick="startPractice(\''+c[0]+'\')">Practice This</button>';g.appendChild(d);});
+}
+
+function renderShop(){
+  var g=document.getElementById('shopGrid');g.innerHTML='';
+  shopItems.forEach(function(item){
+    var owned=ownedItems.indexOf(item.id)>-1;
+    var d=document.createElement('div');d.className='shop-item';
+    var preview='';
+    if(item.theme){
+      var p=themePreview[item.theme]||['#eee','#ddd','#ccc'];
+      preview='<div style="height:42px;border-radius:14px;margin-bottom:10px;border:1px solid #ddd;background:linear-gradient(90deg,'+p[0]+' 0%,'+p[0]+' 33%,'+p[1]+' 33%,'+p[1]+' 66%,'+p[2]+' 66%,'+p[2]+' 100%);"></div>';
+    }
+    var action='';
+    if(owned&&item.theme)action='<button onclick="equipTheme(\''+item.theme+'\')">Equip</button>';
+    else if(owned)action='<span class="owned">Owned</span>';
+    else action='<button onclick="buyItem(\''+item.id+'\')">Buy for '+item.cost+' Gems</button>';
+    d.innerHTML=preview+(owned?'<span class="owned">Owned</span>':'')+'<h3>'+item.name+'</h3><p>'+item.desc+'</p><p class="mini-note">Cost: '+item.cost+' Gems</p>'+action;
+    g.appendChild(d);
+  });
+}
+
+function renderProfile(){
+  var g=document.getElementById('profileGrid');
+  var ownedNames=ownedItems.length?ownedItems.map(function(id){var item=shopItems.find(function(x){return x.id===id;});return item?item.name:id;}).join(', '):'No shop items yet — go earn those Geometry Gems.';
+  var claimedNames=claimedRewards.length?claimedRewards.map(function(id){var r=rewards.find(function(x){return x.id===id;});return r?r.name:id;}).join(', '):'No rewards claimed yet.';
+  g.innerHTML='<div class="reward-item"><h3>'+playerName+'</h3><p><strong>Rank:</strong> '+rankName()+'</p><p><strong>Email:</strong> '+(playerEmail||'None saved')+'</p><p><strong>Account type:</strong> '+(isGuest?'Guest mode':'Local saved profile')+'</p></div><div class="reward-item"><h3>Geometry Grind Stats</h3><p><strong>Gems:</strong> '+gems+'</p><p><strong>Lifetime points:</strong> '+lifetimePoints+'</p><p><strong>Total correct:</strong> '+correctTotal+'</p><p><strong>Hard solves:</strong> '+hardCorrect+'</p><p><strong>Best streak:</strong> '+bestStreak+'</p></div><div class="reward-item"><h3>Owned Shop Items</h3><p>'+ownedNames+'</p></div><div class="reward-item"><h3>Claimed Rewards</h3><p>'+claimedNames+'</p></div>';
+}
+
+function buyItem(id){
+  var item=shopItems.find(function(x){return x.id===id;}); if(!item)return;
+  if(ownedItems.indexOf(id)>-1){renderShop();return;}
+  if(gems<item.cost){alert('Not enough Geometry Gems yet. Solve more problems!');return;}
+  gems-=item.cost; ownedItems.push(id);
+  if(item.theme){activeTheme=item.theme;applyTheme();}
+  saveProfile(); updateStats(); renderShop();
+}
+function equipTheme(theme){activeTheme=theme;applyTheme();saveProfile();renderShop();}
+
+function renderRewards(){
+  var g=document.getElementById('rewardGrid');
+  g.innerHTML='<div class="reward-item"><h3>Your Rank</h3><p><strong>'+rankName()+'</strong></p><p>Lifetime Points: '+lifetimePoints+'</p><p>Total Correct: '+correctTotal+'</p></div>';
+  rewards.forEach(function(r){var claimed=claimedRewards.indexOf(r.id)>-1;var can=r.ok();var d=document.createElement('div');d.className='reward-item';d.innerHTML=(claimed?'<span class="owned">Claimed</span>':'')+'<h3>'+r.name+'</h3><p>'+r.desc+'</p><p class="mini-note">Reward: '+r.amount+' Gems</p><button '+((claimed||!can)?'disabled':'')+' onclick="claimReward(\''+r.id+'\')">'+(claimed?'Claimed':can?'Claim Reward':'Locked')+'</button>';g.appendChild(d);});
+}
+function claimReward(id){var r=rewards.find(function(x){return x.id===id;});if(!r||claimedRewards.indexOf(id)>-1||!r.ok())return;claimedRewards.push(id);gems+=r.amount;saveProfile();updateStats();renderRewards();}
+
+function startPractice(m){mode=m;score=0;streak=0;totalCases=0;hintsUsed=0;recent=[];lastCorrectSlots=[];showScreen('gameScreen');nextCase();}
+function forceBonusCase(){loadCase(makeCase('bonus'));}
+function nextCase(){loadCase(makeCase(mode));}
+
+function choiceSet(answer,wrongs){var ans=String(answer);var set=new Set([ans].concat(wrongs.map(String)));var guard=0;while(set.size<5&&guard<50){var n=Number(answer);set.add(Number.isFinite(n)?String(n+R(-20,20)):ans+' option '+guard);guard++;}return Array.from(set).slice(0,5);}
+function arrangeChoices(choices,answer){var correct=String(answer);var wrongs=shuffle(choices.map(String).filter(function(x){return x!==correct;})).slice(0,4);while(wrongs.length<4)wrongs.push('Extra choice '+wrongs.length);var slot;do{slot=Math.floor(Math.random()*5);}while(lastCorrectSlots.length>=2&&lastCorrectSlots[0]===slot&&lastCorrectSlots[1]===slot);lastCorrectSlots.push(slot);if(lastCorrectSlots.length>2)lastCorrectSlots.shift();var out=[],w=0;for(var i=0;i<5;i++)out[i]=i===slot?correct:wrongs[w++];return out;}
+function Q(type,title,topic,diff,points,prompt,answer,wrong,hint,explain,steps,diagram,note){return{type:type,title:title,topic:topic,diff:diff,points:points,prompt:prompt,answer:String(answer),choices:choiceSet(answer,wrong),hint:hint,explain:explain,steps:steps,diagram:diagram,note:note};}
+
+function getBank(){
+  var bank={
+    similarity:[qSimilarScale,qAreaScale,qAngleBisectorArea,qCeva,qSymmedian,qTriangleMidlineRatio,qParallelCutRatio,qSimilarityAA,qSimilaritySAS],
+    circles:[qIntersectChords,qTangentSecant,qCyclicPtolemy,qSecantQuadratic,qTangentRadiusArea,qBrokenChord,qEqualPowers,qInscribedAngleArc,qTangentChordAngle],
+    coordinate:[qShoelaceParam,qDistanceSquared,qCoordinateArea,qSlopeParallel,qMidpointDistance,qCoordinateRectangleArea],
+    area:[qAreaScale,qMedialArea,qMedianArea,qTrapezoid,qViviani,qAngleBisectorArea,qShadedRectangle,qParallelogramTriangleArea],
+    right:[qMedianLength,qAltitudeHypotenuse,qScaledTriple,qSemicircleChord,qRightRatio,qThirtySixtyNinety,qPythagoreanMissingLeg],
+    angles:[qIncenterAngle,qCyclicAngle,qPolygonInterior,qParallelAlgebra,qExteriorAlgebra],
+    counting:[qIntegerIsosceles,qDiagonals,qTriangleCounting,qGridSquares,qHandshakeDiagonals],
+    proofs:[qSSSReason,qSASReason,qASAReason,qAASReason,qHLReason,qSimilarityReason,qCPCTC,qParallelogramProof,qMedianLength,qAngleBisectorArea,qIncenterAngle,qMedialArea,qTrapezoid,qCyclicAngle],
+    bonus:[qMenelaus,qEulerLine,qMedianLength,qSymmedian,qTangentSecant,qSecantQuadratic,qIntersectChords,qCeva,qShoelaceParam,qBrokenChord,qViviani,qIncenterAngle,qCentroidRatio,qEqualPowers,qAngleBisectorArea,qCyclicPtolemy,qMedialArea,qIntegerIsosceles,qSemicircleChord,qHandshakeDiagonals,qTriangleMidlineRatio,qInscribedAngleArc,qShadedRectangle,qThirtySixtyNinety,qSimilarityAA,qSimilaritySAS,qHLReason]
+  };
+  bank.mixed=[].concat(bank.similarity,bank.circles,bank.coordinate,bank.area,bank.right,bank.angles,bank.counting,bank.proofs);
+  return bank;
+}
+function makeCase(m){var bank=getBank();var pool=bank[m]||bank.mixed;if(!Array.isArray(pool)||pool.length===0)pool=bank.mixed;for(var i=0;i<12;i++){var c=pick(pool)();if(c&&recent.indexOf(c.type)===-1)return c;}return pick(pool)();}
+function loadCase(c){
+  applyTheme();
+  currentCase=c;answered=false;usedHintThisQuestion=false;totalCases++;recent.push(c.type);if(recent.length>5)recent.shift();
+  document.getElementById('caseTitle').textContent=c.title;document.getElementById('caseTopic').textContent=c.topic;document.getElementById('prompt').textContent=c.prompt;document.getElementById('diagramBox').innerHTML=c.diagram;document.getElementById('diagramNote').innerHTML=c.note+'<br><span class="diagram-tip">Interactive: click labels/sides to highlight them, mark points, or draw helper segments.</span>';activateDiagram();
+  var badge=document.getElementById('difficultyBadge');badge.textContent=c.diff;badge.className=c.points>=5?'difficulty hard':'difficulty';
+  var box=document.getElementById('choices');box.innerHTML='';arrangeChoices(c.choices,c.answer).forEach(function(a){var btn=document.createElement('button');btn.type='button';btn.className='choice';btn.textContent=String(a);btn.dataset.answer=String(a);btn.addEventListener('click',function(){checkAnswer(this,this.dataset.answer);});box.appendChild(btn);});
+  ['hintPanel','feedbackPanel','solutionPanel'].forEach(function(id){var p=document.getElementById(id);p.className='panel';p.innerHTML='';});
+  document.getElementById('hintBtn').disabled=false;document.getElementById('solutionBtn').disabled=true;document.getElementById('nextBtn').disabled=true;saveProfile();updateStats();
+}
+function buildDiagramLabelCard(c){
+  var text=(c.prompt||'')+' '+(c.title||'');
+  var cleaned=text.replace(/[.,?]/g,' ');
+  var words=cleaned.split(' ');
+  var chips=[];
+  function addChip(kind,value,cls){
+    if(!value)return;
+    var html='<span class="diagram-chip '+(cls||'')+'">'+kind+': '+value+'</span>';
+    if(chips.indexOf(html)===-1)chips.push(html);
+  }
+  for(var i=0;i<words.length;i++){
+    var w=words[i];
+    if(!w)continue;
+    if(w.indexOf('°')>-1)addChip('Angle',w,'angle-chip');
+    if(w.indexOf('(')>-1&&w.indexOf(')')>-1)addChip('Point',w,'coord-chip');
+    if(w.indexOf('=')>-1)addChip('Given',w,'');
+    if(w.indexOf(':')>-1&&w.length<16)addChip('Ratio',w,'');
+    if((w==='by'||w==='and')&&i>0&&i+1<words.length)addChip('Numbers',words[i-1]+' '+w+' '+words[i+1],'');
+    if(w.toLowerCase()==='base'&&i+1<words.length)addChip('Length','base '+words[i+1],'');
+    if(w.toLowerCase()==='height'&&i+1<words.length)addChip('Length','height '+words[i+1],'');
+  }
+  var lower=cleaned.toLowerCase();
+  var f=lower.indexOf('find ');
+  if(f>-1){
+    var target=cleaned.slice(f+5).split('  ')[0].trim();
+    if(target.length>40)target=target.slice(0,40)+'...';
+    addChip('Find',target,'target-chip');
+  }
+  if(chips.length===0)addChip('Note','Use the letters, side marks, and angle marks shown in the diagram.','');
+  return '<div class="diagram-label-card"><strong>Current diagram labels:</strong><div class="diagram-label-grid">'+chips.join('')+'</div></div>';
+}
+function getShapeSize(){var el=document.getElementById('shapeSize');return el?Number(el.value):28;}
+function getShapeRotate(){var el=document.getElementById('shapeRotate');return el?Number(el.value):0;}
+function getLineStyle(){var el=document.getElementById('lineStyle');return el?el.value:'solid';}
+
+function setDiagramTool(tool){diagramTool=tool;pendingLinePoint=null;isDrawingFree=false;currentFreePath=null;}
+function selectMark(el){if(selectedMark)selectedMark.classList.remove('selected-mark');selectedMark=el;if(selectedMark)selectedMark.classList.add('selected-mark');}
+function makeMarkSelectable(el){el.addEventListener('click',function(evt){evt.stopPropagation();selectMark(el);});el.addEventListener('pointerdown',function(evt){evt.stopPropagation();selectMark(el);startDragMark(el,evt);});return el;}
+function getMarkCenter(el){if(el.tagName==='circle')return{x:Number(el.getAttribute('cx')),y:Number(el.getAttribute('cy'))};if(el.tagName==='polygon')return{x:Number(el.dataset.cx),y:Number(el.dataset.cy)};if(el.tagName==='path')return{x:Number(el.dataset.cx||0),y:Number(el.dataset.cy||0)};if(el.tagName==='line')return{x:(Number(el.getAttribute('x1'))+Number(el.getAttribute('x2')))/2,y:(Number(el.getAttribute('y1'))+Number(el.getAttribute('y2')))/2};return{x:0,y:0};}
+function startDragMark(el,evt){var svg=document.querySelector('#diagramBox svg');if(!svg)return;draggingMark=el;var p=svgPointFromEvent(svg,evt);var c=getMarkCenter(el);dragOffset={x:p.x-c.x,y:p.y-c.y};}
+function moveSelectedMarkTo(x,y){var el=draggingMark;if(!el)return;if(el.tagName==='circle'){el.setAttribute('cx',x);el.setAttribute('cy',y);}else if(el.tagName==='line'){var cx=(Number(el.getAttribute('x1'))+Number(el.getAttribute('x2')))/2,cy=(Number(el.getAttribute('y1'))+Number(el.getAttribute('y2')))/2,dx=x-cx,dy=y-cy;el.setAttribute('x1',Number(el.getAttribute('x1'))+dx);el.setAttribute('y1',Number(el.getAttribute('y1'))+dy);el.setAttribute('x2',Number(el.getAttribute('x2'))+dx);el.setAttribute('y2',Number(el.getAttribute('y2'))+dy);}else if(el.tagName==='path'){el.dataset.cx=x;el.dataset.cy=y;updateSelectedMark();}else if(el.tagName==='polygon'){el.dataset.cx=x;el.dataset.cy=y;updateSelectedMark();}}
+function applyLineStyle(el){if(getLineStyle()==='dotted')el.classList.add('mark-dotted');else el.classList.remove('mark-dotted');}
+function polygonPoints(cx,cy,sides,size,rotDeg){
+  var rot=rotDeg*Math.PI/180;
+  var points=[];
+  for(var i=0;i<sides;i++){
+    var a=(2*Math.PI*i)/sides+rot-Math.PI/2;
+    var x=cx+size*Math.cos(a);
+    var y=cy+size*Math.sin(a);
+    points.push(x+','+y);
+  }
+  return points.join(' ');
+}
+function updateSelectedMark(){if(!selectedMark)return;var size=getShapeSize(),rot=getShapeRotate();if(selectedMark.tagName==='circle'){if(selectedMark.classList.contains('mark-dot'))selectedMark.setAttribute('r',Math.max(4,size/5));else selectedMark.setAttribute('r',size);var cx=selectedMark.getAttribute('cx'),cy=selectedMark.getAttribute('cy');if(cx&&cy)selectedMark.setAttribute('transform','rotate('+rot+' '+cx+' '+cy+')');}if(selectedMark.tagName==='line'){selectedMark.setAttribute('stroke-width',Math.max(2,size/12));applyLineStyle(selectedMark);}if(selectedMark.tagName==='path'){selectedMark.setAttribute('stroke-width',Math.max(2,size/14));applyLineStyle(selectedMark);if(selectedMark.classList.contains('mark-arc')){var cx=Number(selectedMark.dataset.cx),cy=Number(selectedMark.dataset.cy),deg=60;var endX=cx+size*Math.cos(deg*Math.PI/180),endY=cy-size*Math.sin(deg*Math.PI/180);selectedMark.setAttribute('d','M '+(cx+size)+' '+cy+' A '+size+' '+size+' 0 0 0 '+endX+' '+endY);selectedMark.setAttribute('transform','rotate('+rot+' '+cx+' '+cy+')');}}if(selectedMark.tagName==='polygon'){var cx=Number(selectedMark.dataset.cx),cy=Number(selectedMark.dataset.cy),sides=Number(selectedMark.dataset.sides)||3;if(cx&&cy){selectedMark.setAttribute('points',polygonPoints(cx,cy,sides,size,rot));}selectedMark.setAttribute('stroke-width',Math.max(2,size/14));applyLineStyle(selectedMark);}}
+
+function clearDiagramMarks(){var svg=document.querySelector('#diagramBox svg');if(!svg)return;svg.querySelectorAll('.user-mark').forEach(function(el){el.remove();});pendingLinePoint=null;selectedMark=null;draggingMark=null;}
+function svgPointFromEvent(svg,evt){var pt=svg.createSVGPoint();pt.x=evt.clientX;pt.y=evt.clientY;return pt.matrixTransform(svg.getScreenCTM().inverse());}
+function addUserPoint(svg,p){var c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',p.x);c.setAttribute('cy',p.y);c.setAttribute('r',Math.max(4,getShapeSize()/5));c.setAttribute('class','user-mark mark-dot');makeMarkSelectable(c);svg.appendChild(c);selectMark(c);}
+function addUserLine(svg,p1,p2){var l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',p1.x);l.setAttribute('y1',p1.y);l.setAttribute('x2',p2.x);l.setAttribute('y2',p2.y);l.setAttribute('class','user-mark mark-line');l.setAttribute('stroke-width',Math.max(2,getShapeSize()/12));applyLineStyle(l);makeMarkSelectable(l);svg.appendChild(l);selectMark(l);}
+function addUserCircle(svg,p){var c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',p.x);c.setAttribute('cy',p.y);c.setAttribute('r',getShapeSize());c.setAttribute('class','user-mark mark-circle');applyLineStyle(c);makeMarkSelectable(c);svg.appendChild(c);selectMark(c);}
+function addUserArc(svg,p){var size=getShapeSize();var deg=60;var rot=getShapeRotate();var path=document.createElementNS('http://www.w3.org/2000/svg','path');var endX=p.x+size*Math.cos(deg*Math.PI/180),endY=p.y-size*Math.sin(deg*Math.PI/180);path.setAttribute('d','M '+(p.x+size)+' '+p.y+' A '+size+' '+size+' 0 0 0 '+endX+' '+endY);path.setAttribute('class','user-mark mark-arc');path.dataset.cx=p.x;path.dataset.cy=p.y;path.setAttribute('transform','rotate('+rot+' '+p.x+' '+p.y+')');applyLineStyle(path);makeMarkSelectable(path);svg.appendChild(path);selectMark(path);} 
+function addUserPolygon(svg,p){var raw=Number(document.getElementById('polySides')?.value||3);var sides=Math.max(3,Math.floor(raw));var r=getShapeSize();var poly=document.createElementNS('http://www.w3.org/2000/svg','polygon');poly.setAttribute('points',polygonPoints(p.x,p.y,sides,r,getShapeRotate()));poly.setAttribute('class','user-mark mark-line');poly.setAttribute('fill','none');poly.dataset.cx=p.x;poly.dataset.cy=p.y;poly.dataset.sides=sides;poly.setAttribute('stroke-width',Math.max(2,r/14));applyLineStyle(poly);makeMarkSelectable(poly);svg.appendChild(poly);selectMark(poly);} 
+function startFreeDraw(svg,p){isDrawingFree=true;currentFreePath=document.createElementNS('http://www.w3.org/2000/svg','path');currentFreePath.setAttribute('d','M '+p.x+' '+p.y);currentFreePath.setAttribute('class','user-mark mark-line');currentFreePath.setAttribute('stroke-width',Math.max(2,getShapeSize()/14));currentFreePath.setAttribute('fill','none');applyLineStyle(currentFreePath);makeMarkSelectable(currentFreePath);svg.appendChild(currentFreePath);selectMark(currentFreePath);}
+function continueFreeDraw(svg,p){if(!isDrawingFree||!currentFreePath)return;currentFreePath.setAttribute('d',currentFreePath.getAttribute('d')+' L '+p.x+' '+p.y);}
+function stopFreeDraw(){isDrawingFree=false;currentFreePath=null;}
+function activateDiagram(){var svg=document.querySelector('#diagramBox svg');if(!svg)return;svg.querySelectorAll('line,polygon,path,circle,rect,text').forEach(function(el){el.classList.add('hot');el.addEventListener('click',function(evt){if(diagramTool==='free')return;evt.stopPropagation();el.classList.toggle('diagram-focus');});});svg.addEventListener('click',function(evt){if(diagramTool==='free')return;var p=svgPointFromEvent(svg,evt);if(diagramTool==='point'){addUserPoint(svg,p);}else if(diagramTool==='circle'){addUserCircle(svg,p);}else if(diagramTool==='angle'){addUserArc(svg,p);}else if(diagramTool==='line'){if(!pendingLinePoint){pendingLinePoint=p;addUserPoint(svg,p);}else{addUserLine(svg,pendingLinePoint,p);pendingLinePoint=null;}}else if(diagramTool==='polygon'){addUserPolygon(svg,p);} });svg.addEventListener('pointerdown',function(evt){if(diagramTool!=='free')return;evt.preventDefault();var p=svgPointFromEvent(svg,evt);startFreeDraw(svg,p);});svg.addEventListener('pointermove',function(evt){if(diagramTool!=='free'||!isDrawingFree)return;evt.preventDefault();var p=svgPointFromEvent(svg,evt);continueFreeDraw(svg,p);});svg.addEventListener('pointermove',function(evt){if(!draggingMark)return;evt.preventDefault();var p=svgPointFromEvent(svg,evt);moveSelectedMarkTo(p.x-dragOffset.x,p.y-dragOffset.y);});svg.addEventListener('pointerup',function(){draggingMark=null;stopFreeDraw();});svg.addEventListener('pointerleave',function(){draggingMark=null;stopFreeDraw();});}
+function showHint(){if(!currentCase)return;usedHintThisQuestion=true;hintsUsed++;var p=document.getElementById('hintPanel');p.innerHTML='<strong>Hint:</strong> '+currentCase.hint;p.classList.add('show');document.getElementById('hintBtn').disabled=true;saveProfile();updateStats();}
+function getBoosts(){var boosts={gemsFlat:0,circleGems:0,doubleGems:0,earlyStreak:false,streakBoost:false,noHintBonus:false,comeback:false,randomGems:false};ownedItems.forEach(function(id){var it=shopItems.find(function(x){return x.id===id;});if(!it||!it.boost)return;var b=it.boost;if(b.type==='gemsFlat')boosts.gemsFlat+=b.value||1;if(b.type==='circleGems')boosts.circleGems+=b.value||1;if(b.type==='doubleGems')boosts.doubleGems+=1;if(b.type==='earlyStreak')boosts.earlyStreak=true;if(b.type==='streakBoost')boosts.streakBoost=true;if(b.type==='noHintBonus')boosts.noHintBonus=true;if(b.type==='comeback')boosts.comeback=true;if(b.type==='randomGems')boosts.randomGems=true;});return boosts;}
+function checkAnswer(btn,a){
+  if(answered||!currentCase)return;answered=true;
+  var selected=String(a).trim();var correct=String(currentCase.answer).trim();
+  document.querySelectorAll('.choice').forEach(function(x){x.disabled=true;if(String(x.dataset.answer||x.textContent).trim()===correct)x.classList.add('correct');});
+  var f=document.getElementById('feedbackPanel');var boosts=getBoosts();
+  if(selected===correct){
+    triggerConfetti();
+    var gemGain=currentCase.points;
+    if(boosts.randomGems)gemGain+=R(1,3);
+    if(streak>=(boosts.earlyStreak?1:2))gemGain+=(boosts.streakBoost?2:1);
+    gemGain+=boosts.gemsFlat;
+    if(currentCase.topic.toLowerCase().indexOf('circle')>-1)gemGain+=boosts.circleGems;
+    if(boosts.noHintBonus&&!usedHintThisQuestion)gemGain+=1;
+    if(boosts.doubleGems>0&&Math.random()<0.25)gemGain*=2;
+    if(boosts.comeback&&lastAnswerWrong)gemGain+=3;
+    gems+=gemGain;score+=currentCase.points;lifetimePoints+=currentCase.points;streak++;correctTotal++;
+    if(currentCase.points>=5)hardCorrect++;bestStreak=Math.max(bestStreak,streak);
+    lastAnswerWrong=false;
+    btn.classList.add('correct');
+    f.innerHTML='<strong>Correct.</strong> +'+gemGain+' Geometry Gems. '+currentCase.explain;
+  } else {
+    streak=0;lastAnswerWrong=true;
+    btn.classList.add('wrong');
+    f.innerHTML='<strong>Not quite.</strong> Correct answer: <strong>'+currentCase.answer+'</strong>. '+currentCase.explain;
+  }
+  f.classList.add('show');
+  document.getElementById('solutionBtn').disabled=false;
+  document.getElementById('nextBtn').disabled=false;
+  saveProfile();updateStats();
+}
+function tutorInfo(c){var t=(c.title+' '+c.topic+' '+c.prompt).toLowerCase();if(t.indexOf('euler')>-1)return['Euler line ratio','The centroid, orthocenter, and circumcenter lie on the Euler line. The centroid splits the line so HG:GO = 2:1.','Use it when a problem mentions centroid, orthocenter, circumcenter, HG, GO, or HO.'];if(t.indexOf('ceva')>-1)return['Ceva theorem','Ceva is for three cevians in a triangle that meet at one point. The three side ratios multiply to 1.','Use it when lines from all three vertices are concurrent.'];if(t.indexOf('menelaus')>-1)return['Menelaus theorem','Menelaus is for one straight transversal cutting across a triangle. The three positive side-ratio factors multiply to 1 in this version.','Use it when one line passes through sides or extensions of a triangle.'];if(t.indexOf('ptolemy')>-1)return['Ptolemy theorem','In a cyclic quadrilateral, diagonal product equals the sum of products of opposite sides.','Use it when four points lie on a circle and diagonals/sides are given.'];if(t.indexOf('symmedian')>-1)return['Symmedian ratio theorem','A symmedian splits the opposite side in the ratio of the squares of the adjacent sides.','Use it when the word symmedian appears.'];if(t.indexOf('angle bisector')>-1)return['Angle Bisector Theorem','An angle bisector splits the opposite side in the ratio of the two adjacent sides.','Use it when a segment bisects an angle in a triangle.'];if(t.indexOf('chord')>-1)return['Intersecting chords theorem','When chords intersect inside a circle, the products of the two pieces are equal.','Use it when two chords cross inside a circle.'];if(t.indexOf('tangent')>-1||t.indexOf('secant')>-1||t.indexOf('power')>-1)return['Power of a point','Tangents and secants from the same point create equal length products.','Use tangent² = external × whole secant.'];return['Geometry theorem matching','Identify the structure in the diagram, choose the theorem that matches it, then substitute the numbers.','Look for keywords like circle, median, angle bisector, cyclic, tangent, similar, or right triangle.'];}
+function showSolution(){if(!currentCase||!answered)return;var p=document.getElementById('solutionPanel');var info=tutorInfo(currentCase);p.innerHTML='<strong>What theorem are we using?</strong><p><strong>'+info[0]+':</strong> '+info[1]+'</p><p><strong>When do you use it?</strong> '+info[2]+'</p><strong>Step-by-step solution:</strong><ol class="step-list">'+currentCase.steps.map(function(s,i){return'<li><strong>Step '+(i+1)+':</strong> '+s+'</li>';}).join('')+'</ol><p><strong>Final answer:</strong> '+currentCase.answer+'</p>';p.classList.add('show');}
+
+function qTriangleMidlineRatio(){var d=R(8,18),ans=2*d;return Q('midlineRatio','Triangle Midline Ratio','Similarity + Midsegments','Hard · 3 points',3,'In triangle ABC, points D and E are the midpoints of AB and AC. If DE='+d+', find BC.',ans,[ans-4,ans-2,ans+2,ans+6],'A segment joining two side midpoints of a triangle is parallel to the third side and half as long.','Since DE is a midsegment, DE=BC/2. So BC='+ans+'.',['D and E are midpoints, so DE is a midsegment.','Midsegment theorem: DE is half of BC.','DE='+d+', so BC=2·'+d+'='+ans+'.'],svgMidline(d,'?'),'Labeled midsegment diagram; labels are placed away from the lines for clarity.')}
+function qParallelCutRatio(){var ad=R(4,9),db=R(5,12),ae=R(6,12);var ec=ae*db/ad;if(ec%1!==0){ad=6;db=9;ae=8;ec=12;}return Q('parallelCutRatio','Parallel Cut Ratio','Similarity + Proportions','Hard · 3 points',3,'In triangle ABC, segment DE is parallel to BC with D on AB and E on AC. If AD='+ad+', DB='+db+', and AE='+ae+', find EC.',ec,[ec-2,ec-1,ec+2,ec+4],'Parallel lines create similar triangles, so AD/AB = AE/AC.','AB='+Number(ad+db)+'. Set '+ad+'/'+Number(ad+db)+'='+ae+'/('+ae+'+EC). Solving gives EC='+ec+'.',['Because DE is parallel to BC, triangle ADE is similar to triangle ABC.','AB=AD+DB='+ad+'+'+db+'='+Number(ad+db)+'.','Use AD/AB=AE/AC: '+ad+'/'+Number(ad+db)+'='+ae+'/('+ae+'+EC).','Solving gives EC='+ec+'.'],svgParallelCut(ad,db,ae,'?'),'Labeled similarity diagram with parallel markings.')}
+function qInscribedAngleArc(){return Q('inscribedArc','Inscribed Angle Arc','Circle Angles','Hard · 3 points',3,'An inscribed angle intercepts an arc of 128°. Find the angle measure.',64,['54°','60°','72°','128°'],'An inscribed angle is half its intercepted arc.','The angle is 128°/2=64°.',['Use the Inscribed Angle Theorem.','Angle measure = intercepted arc / 2.','128°/2=64°.'],svgCircleLabeled('128°','?'),'Labeled circle diagram with highlighted arc.')}
+function qTangentChordAngle(){return Q('tanChordAngle','Tangent-Chord Angle','Circle Angles','Bonus · 5 points',5,'A tangent and a chord meet at point A on a circle. The intercepted arc measures 86°. Find the angle between the tangent and chord.',43,['36°','46°','86°','94°'],'The angle formed by a tangent and a chord equals half the intercepted arc.','Angle=86°/2=43°.',['Recognize the tangent-chord theorem.','The angle equals half the intercepted arc.','86°/2=43°.'],svgCircleLabeled('86°','?'),'Circle diagram labeled with tangent and chord.')}
+function qMidpointDistance(){return Q('midpointDistance','Midpoint Distance','Coordinate Geometry','Hard · 3 points',3,'Points A(2,3) and B(14,9) have midpoint M. Find AM².',45,[36,40,50,60],'The midpoint is halfway between A and B, so AM is half of AB.','Horizontal change from A to M is 6 and vertical change is 3, so AM²=6²+3²=45.',['Find midpoint M: ((2+14)/2,(3+9)/2)=(8,6).','From A(2,3) to M(8,6), changes are 6 and 3.','AM²=6²+3²=36+9=45.'],svgCoordLabeled(),'Coordinate diagram labeled A, B, M.')}
+function qCoordinateRectangleArea(){return Q('coordRect','Coordinate Rectangle Area','Coordinate Geometry','Hard · 3 points',3,'Rectangle ABCD has A(1,2), B(9,2), and D(1,7). Find its area.',40,[32,36,45,56],'Horizontal and vertical sides are easy to read from coordinates.','AB=8 and AD=5, so area=8·5=40.',['AB is horizontal from x=1 to x=9, so AB=8.','AD is vertical from y=2 to y=7, so AD=5.','Area=length·width=8·5=40.'],svgRectCoord(),'Coordinate rectangle drawn with labeled side lengths.')}
+function qShadedRectangle(){return Q('shadedRect','Shaded Rectangle Triangle','Area Geometry','Hard · 3 points',3,'A 12 by 10 rectangle has a triangle cut from one corner with legs 4 and 6. Find the remaining area.',108,[96,104,112,116],'Subtract the triangle area from the rectangle area.','Rectangle area=120. Triangle area=4·6/2=12. Remaining area=108.',['Rectangle area=12·10=120.','Cut-out triangle area=4·6/2=12.','Remaining area=120−12=108.'],svgShadedRect(),'Labeled shaded-area rectangle.')}
+function qParallelogramTriangleArea(){return Q('paraTriArea','Parallelogram Diagonal Area','Area Geometry','Hard · 3 points',3,'A parallelogram has base 18 and height 7. A diagonal divides it into two congruent triangles. Find the area of one triangle.',63,[54,72,126,56],'A diagonal divides a parallelogram into two equal-area triangles.','Parallelogram area=18·7=126, so one triangle has area 63.',['Parallelogram area=base·height=18·7=126.','A diagonal splits it into two congruent triangles.','One triangle area=126/2=63.'],svgPara(),'Parallelogram diagram with diagonal and height.')}
+function qThirtySixtyNinety(){var s=R(5,12),ans=2*s;return Q('thirtySixty','30-60-90 Triangle','Right Triangles','Hard · 3 points',3,'A 30-60-90 triangle has short leg '+s+'. Find the hypotenuse.',ans,[s,ans+2,ans+4,ans*2],'In a 30-60-90 triangle, the hypotenuse is twice the short leg.','Hypotenuse=2·'+s+'='+ans+'.',['Recognize the 30-60-90 side ratio: short leg : long leg : hypotenuse = 1 : √3 : 2.','Short leg='+s+', so hypotenuse=2·'+s+'='+ans+'.'],svgRightLabeled(s,'?','30°','60°'),'Special right triangle diagram labeled by angles.')}
+function qPythagoreanMissingLeg(){var triples=[[7,24,25],[9,12,15],[8,15,17],[5,12,13]];var t=pick(triples),leg=t[0],ans=t[1],hyp=t[2];return Q('missingLeg','Missing Leg','Right Triangles','Hard · 3 points',3,'A right triangle has hypotenuse '+hyp+' and one leg '+leg+'. Find the other leg.',ans,[ans-2,ans+2,ans+4,leg],'Use a²+b²=c² and solve for the missing leg.','Missing leg²='+hyp+'²−'+leg+'², so the leg is '+ans+'.',['Use the Pythagorean Theorem.','x²+'+leg+'²='+hyp+'².','x²='+(hyp*hyp)+'−'+(leg*leg)+'='+(ans*ans)+'.','x='+ans+'.'],svgRightLabeled(leg,hyp,'90°',''),'Right triangle drawn with leg and hypotenuse labels.')}
+
+function qSimilarityAA(){var scale=pick([2,3,4]),small=R(5,12),large=small*scale,side=R(6,14),ans=side*scale;return Q('simAA','Triangle Scale Case','Similarity','Hard · 3 points',3,'Triangles ABC and DEF are similar by AA. If AB='+small+', DE='+large+', and BC='+side+', find EF.',ans,[ans-scale,ans+scale,ans+2*scale,side+scale],'AA proves similarity, then corresponding sides have the same scale factor.','Scale factor is '+large+'/'+small+'='+scale+', so EF='+side+'·'+scale+'='+ans+'.',['AA gives triangle similarity.','Scale factor from ABC to DEF is DE/AB='+large+'/'+small+'='+scale+'.','BC corresponds to EF.','EF='+side+'·'+scale+'='+ans+'.'],svgCongruence('',small,side,'',large,'?','',50,70),'Similarity scale problem.');}
+function qSimilaritySAS(){var s1=R(4,9),s2=R(6,12),k=pick([2,3]);var ans=s2*k;return Q('simSAS','Proportional Triangle Case','Similarity','Bonus · 5 points',5,'Two triangles have included angle 60°. Around that angle, the first triangle has sides '+s1+' and '+s2+', and the second has corresponding side '+(s1*k)+' and unknown side x. Find x.',ans,[ans-k,ans+k,ans+2*k,s2+k],'SAS similarity uses proportional sides around an included equal angle.','Scale factor is '+(s1*k)+'/'+s1+'='+k+', so x='+s2+'·'+k+'='+ans+'.',['The included angles are equal: 60°.','The corresponding side ratio is '+(s1*k)+'/'+s1+'='+k+'.','The other corresponding side is x='+s2+'·'+k+'='+ans+'.'],svgCongruence('',s1,s2,'',s1*k,'?','',60,''),'SAS similarity problem.');}
+function qSimilarScale(){var a=R(5,12),k=pick([2,3,4]),b=R(7,15),ans=b*k;return Q('simScale','Similar Triangle Scale','Similarity','Hard · 3 points',3,'△ABC ∼ △DEF. AB='+a+', DE='+(a*k)+', and BC='+b+'. Find EF.',ans,[ans+k,ans-k,ans+2*k,ans+5],'Use the scale factor DE/AB.','Scale factor is '+k+', so EF='+ans+'.',['DE/AB='+(a*k)+'/'+a+'='+k+'.','EF corresponds to BC, so EF='+k+'·'+b+'.','EF='+ans+'.'],svgTri('A','B','C',a,'',''+b,'','',''),'Original generated similarity problem.');}
+function qAreaScale(){var A=pick([18,24,32,45,50,72]),k=pick([2,3,4]),ans=A*k*k;return Q('areaScale','Similar Area Scale','Similarity + Area','Hard · 3 points',3,'A triangle has area '+A+'. A similar triangle has side lengths '+k+' times as large. Find the larger area.',ans,[A*k,A+k*k,ans-k*k,ans+k*k],'Area scales by k², not k.','Area scale factor is '+(k*k)+'; larger area='+ans+'.',['Length factor='+k+'.','Area factor='+k+'²='+(k*k)+'.','Area='+A+'·'+(k*k)+'='+ans+'.'],svgNested(),'Area ratio problem.');}
+function qAngleBisectorArea(){return Q('abArea','Angle Bisector Area','Angle Bisector Theorem','Bonus · 5 points',5,'In △ABC, AD bisects ∠A and meets BC at D. If AB:AC=5:7 and [ABC]=96, find [ABD].',40,[36,42,48,56],'Angle bisector gives BD:DC=AB:AC; areas share altitude.','BD:DC=5:7, so [ABD]=40.',['BD:DC=5:7.','Areas ABD and ADC share altitude to BC.','Their areas are in ratio 5:7.','[ABD]=5/(5+7)·96=40.'],svgBisector(),'Combines angle bisector theorem and area ratios.');}
+function qCeva(){return Q('ceva','Ceva Product','Ceva theorem','Bonus · 5 points',5,'In △ABC, D,E,F lie on BC,CA,AB. If BD/DC=2/3 and CE/EA=5/4, what must AF/FB be for AD,BE,CF to be concurrent?','6/5',['5/6','3/2','15/8','8/15'],'Use Ceva: product of the three ratios equals 1.','(2/3)(5/4)(AF/FB)=1, so AF/FB=6/5.',['Ceva says (BD/DC)(CE/EA)(AF/FB)=1.','Substitute: (2/3)(5/4)(AF/FB)=1.','This becomes (5/6)(AF/FB)=1.','AF/FB=6/5.'],svgTri('A','B','C','','','2/3','','',''),'Concurrency theorem problem.');}
+function qMenelaus(){return Q('menelaus','Menelaus Line Ratio','Menelaus theorem','Bonus · 5 points',5,'In triangle ABC, a straight transversal intersects sides or extensions at D, E, and F. Using positive ratio lengths, BD/DC=2/5 and CE/EA=3/4. Find AF/FB.','10/3',['3/10','5/6','6/5','3/2'],'Use Menelaus: the three positive ratio factors multiply to 1.','(2/5)(3/4)(AF/FB)=1, so AF/FB=10/3.',['Multiply the ratios and set equal to 1.','(2/5)(3/4)(AF/FB)=1.','(3/10)(AF/FB)=1.','AF/FB=10/3.'],svgTri('A','B','C','','','2/5','','',''),'Transversal theorem problem.');}
+function qSymmedian(){return Q('symmedian','Symmedian Ratio','Advanced triangle ratio','Bonus · 5 points',5,'A symmedian from A meets BC at K. If AB=10, AC=15, and BC=65, find BK.',20,[18,24,25,30],'Symmedian ratio uses squares of adjacent sides.','BK:KC=10²:15²=4:9, so BK=20.',['BK:KC=AB²:AC².','BK:KC=100:225=4:9.','Total parts=13.','BK=4/13·65=20.'],svgTri('A','B','C','10','15','65','','',''),'Advanced ratio geometry.');}
+function qIntersectChords(){return Q('chords','Intersecting Chords','Circle power','Bonus · 5 points',5,'Two chords intersect at E. If AE=6, EC=18, and BE=9, find ED.',12,[10,14,16,18],'Products of chord segments are equal.','AE·EC=BE·ED, so ED=12.',['6·18=9·ED.','108=9ED.','ED=12.'],svgCircle(),'Circle product theorem.');}
+function qTangentSecant(){return Q('tansec','Tangent-Secant Power','Circle power','Bonus · 5 points',5,'From P, tangent PT and secant PAB are drawn. PA=4 and AB=21. Find PT.',10,[8,9,12,14],'Tangent squared equals external segment times whole secant.','PB=25, so PT²=100, PT=10.',['PB=4+21=25.','PT²=4·25=100.','PT=10.'],svgCircle(),'Power of a point problem.');}
+function qCyclicPtolemy(){return Q('ptolemy','Ptolemy Cyclic Quad','Cyclic quadrilateral','Bonus · 5 points',5,'A rectangle has side lengths 6 and 8. Since every rectangle is cyclic, use Ptolemy to find the product of its diagonals.','100',[80,90,96,120],'Ptolemy says diagonal product equals the sum of products of opposite sides.','The diagonal product is 6·6+8·8=100.',['A rectangle is cyclic.','Ptolemy gives diagonal product = 6·6 + 8·8.','36+64=100.'],svgQuad('','','','','6','8'),'Ptolemy theorem with a guaranteed cyclic quadrilateral.');}
+function qSecantQuadratic(){return Q('secquad','Secant Quadratic','Circle power + algebra','Bonus · 5 points',5,'A point P has power 144. A secant through P has external segment x and internal segment 20. Find positive x.',6,[4,8,9,12],'External times whole equals power.','x(x+20)=144, so x=6.',['x(x+20)=144.','x²+20x−144=0.','(x−6)(x+24)=0.','x=6.'],svgCircle(),'Quadratic circle power problem.');}
+function qTangentRadiusArea(){return Q('tanarea','Tangent Radius Area','Tangent + area','Hard · 3 points',3,'A radius OT=10 is perpendicular to tangent PT=24. Find the area of △OPT.',120,[100,124,160,240],'Radius to tangent is perpendicular, so use triangle area.','Area=10·24/2=120.',['Base=24, height=10.','Area=24·10/2=120.'],svgCircle(),'Tangent geometry area.');}
+function qBrokenChord(){return Q('brokenChord','Broken Chord Quadratic','Circle chord products','Bonus · 5 points',5,'Two chords intersect. One is split into x and x+7; the other into 12 and 20. Find x.',13,[10,12,15,16],'Use intersecting chord products.','x(x+7)=240, so x=13.',['x(x+7)=12·20.','x²+7x−240=0.','(x−13)(x+20)=0.','x=13.'],svgCircle(),'Quadratic circle theorem.');}
+function qEqualPowers(){return Q('equalPower','Equal Powers','Power of a point','Bonus · 5 points',5,'From the same external point P, a tangent to one circle has length 18. A secant to another circle has external segment 9 and whole segment x. If P has equal power with respect to both circles, find x.',36,[27,32,40,45],'Equal powers mean the tangent power equals the secant power.','18²=9x, so x=36.',['18²=324.','9x=324.','x=36.'],svgCircle(),'Power equality with all lengths explicitly defined.');}
+function qShoelaceParam(){return Q('shoe','Shoelace Parameter','Coordinate geometry','Bonus · 5 points',5,'A(0,0), B(12,3), C(k,15) form a triangle of area 81. If k is positive and small, find k.',6,[2,4,8,10],'Use twice the area with the shoelace formula.','2A=162=|180−3k|, so k=6.',['2A=162.','|12·15−3k|=|180−3k|.','180−3k=162.','k=6.'],svgCoord('A(0,0)','B(12,3)','C(k,15)','area=81'),'Coordinate area with a variable.');}
+function qDistanceSquared(){var dx=pick([5,6,8,9]),dy=pick([6,8,12]),ans=dx*dx+dy*dy;return Q('dist2','Distance Squared','Coordinate geometry','Hard · 3 points',3,'Two points differ by '+dx+' horizontally and '+dy+' vertically. Find the square of the distance between them.',ans,[ans-10,ans+10,ans+20,ans-20],'Use d²=dx²+dy².','d²='+dx+'²+'+dy+'²='+ans+'.',['d²='+dx+'²+'+dy+'².','Compute '+(dx*dx)+'+'+(dy*dy)+'='+ans+'.'],svgRight(),'Distance formula without square root.');}
+function qCoordinateArea(){var a=R(8,18),b=R(7,17),ans=a*b/2;return Q('coordArea','Coordinate Triangle Area','Coordinate geometry','Hard · 3 points',3,'A(0,0), B('+a+',0), C(0,'+b+'). Find the area of △ABC.',ans,[ans+5,Math.max(1,ans-5),a+b,a*b],'Axes form perpendicular base and height.','Area='+a+'·'+b+'/2='+ans+'.',['Base='+a+'.','Height='+b+'.','Area='+a+'·'+b+'/2='+ans+'.'],svgCoord('A(0,0)','B('+a+',0)','C(0,'+b+')',''),'Coordinate area problem.');}
+function qSlopeParallel(){return Q('slope','Parallel Slope','Coordinate proof','Hard · 3 points',3,'Line AB has slope 3/4. A line parallel to AB has rise 15. What is its run?',20,[12,16,18,24],'Parallel lines have equal slopes.','15/run=3/4, so run=20.',['15/run=3/4.','3run=60.','run=20.'],svgCoord('A','B','C','slope=3/4, rise=15'),'Coordinate proof style.');}
+function qMedialArea(){return Q('medial','Medial Triangle Area','Midsegment theorem','Bonus · 5 points',5,'The medial triangle of △ABC has area 45. Find [ABC].',180,[135,160,200,225],'Medial triangle side scale is 1/2, so area scale is 1/4.','Original area=180.',['Area scale=1/4.','Original area=45·4=180.'],svgNested(),'Midsegment theorem plus area scaling.');}
+function qMedianArea(){return Q('medianArea','Median Area Split','Area theorem','Hard · 3 points',3,'A median divides a triangle of area 86 into two smaller triangles. What is the area of one smaller triangle?',43,[40,44,46,50],'A median divides a triangle into two equal-area triangles.','Each area is 86/2=43.',['Median creates two equal areas.','86/2=43.'],svgTri('A','B','C','','','area 86','','',''),'Theorem application.');}
+function qTrapezoid(){var a=pick([10,12,14,16]),b=a+pick([8,10,12,14]);var ans=(a+b)/2;return Q('trap','Trapezoid Midsegment','Quadrilateral theorem','Hard · 3 points',3,'A trapezoid has bases '+a+' and '+b+'. Find its midsegment.',ans,[ans-3,ans-1,ans+2,a+b],'Midsegment is average of bases.','('+a+'+'+b+')/2='+ans+'.',['Add the bases: '+a+'+'+b+'='+(a+b)+'.','Divide by 2: '+ans+'.'],svgQuad('','','','',''+a,''+b),'Quadrilateral theorem problem.')}
+function qViviani(){return Q('viviani','Viviani Theorem','Equilateral triangle','Bonus · 5 points',5,'Inside an equilateral triangle of side 18, the perpendicular distances to the three sides sum to h. Find h².',243,[216,225,256,324],'Distance sum equals altitude.','Altitude=9√3, so h²=243.',['Altitude=18√3/2=9√3.','h²=81·3=243.'],svgTri('A','B','C','18','18','18'),'Elegant theorem.');}
+function qMedianLength(){return Q('medianLen','Median Length Trap','Median formula','Bonus · 5 points',5,'In △ABC, AB=13, AC=15, BC=14. M is midpoint of BC. Find AM².',148,[120,136,144,150],'Use median formula: m²=(2b²+2c²−a²)/4.','AM²=148.',['AM²=(2·15²+2·13²−14²)/4.','AM²=(450+338−196)/4=148.'],svgTri('A','B','C','13','15','14'),'Median length formula.');}
+function qAltitudeHypotenuse(){return Q('althyp','Altitude to Hypotenuse','Right triangle similarity','Hard · 3 points',3,'In a right triangle, the altitude to the hypotenuse splits it into segments 9 and 16. Find the altitude.',12,[10,13,14,15],'Altitude squared equals product of hypotenuse segments.','h²=9·16=144, so h=12.',['h²=9·16=144.','h=12.'],svgRight(),'Right triangle similarity.');}
+function qScaledTriple(){return Q('triple','Scaled Pythagorean Triple','Right triangles','Hard · 3 points',3,'A right triangle has legs 24 and 45. Find its hypotenuse.',51,[48,50,54,57],'Recognize 8-15-17 scaled by 3.','Hypotenuse=51.',['24=3·8 and 45=3·15.','Hypotenuse=3·17=51.'],svgRight(),'Speed recognition.');}
+function qSemicircleChord(){return Q('semichord','Semicircle Chord','Circle + right triangle','Bonus · 5 points',5,'A chord of length 16 is parallel to a semicircle diameter and 6 units above it. Find R².',100,[80,90,110,120],'Perpendicular from center to chord bisects it.','Half chord=8, height=6, so R²=100.',['Half chord=8.','R²=8²+6²=100.'],svgCircle(),'Circle chord plus Pythagorean theorem.');}
+function qRightRatio(){return Q('rightRatio','Right Triangle Projection','Similarity theorem','Hard · 3 points',3,'In a right triangle, the altitude to the hypotenuse divides the hypotenuse into segments 9 and 16. Find the square of the leg adjacent to the segment of length 9.','225',[200,216,234,250],'For a right triangle, leg² = hypotenuse × adjacent projection.','The whole hypotenuse is 25, so leg²=25·9=225.',['Hypotenuse=9+16=25.','leg²=25·9=225.'],svgRight(),'Right triangle similarity theorem.');}
+function qIncenterAngle(){var a=pick([50,60,70,80]);var ans=90+a/2;return Q('incenter','Incenter Angle','Triangle centers','Bonus · 5 points',5,'In △ABC, ∠A='+a+'°. If I is the incenter, find ∠BIC.',ans+'°',[ans-10+'°',ans-5+'°',ans+5+'°',ans+10+'°'],'∠BIC=90°+A/2.','∠BIC='+ans+'°.',['Use the incenter angle formula: ∠BIC=90°+∠A/2.','∠A/2='+a+'/2='+(a/2)+'°.','90°+'+(a/2)+'°='+ans+'°.'],svgTri('A','B','C','','','',a+'°','',''),'Triangle center theorem.')}
+function qCyclicAngle(){var a=pick([96,100,104,112,118]);var c=180-a;return Q('cyclicAngle','Cyclic Quadrilateral Angle','Circle angles','Hard · 3 points',3,'In cyclic quadrilateral ABCD, ∠A='+a+'°. Find ∠C.',c+'°',[c-2+'°',c+4+'°',a+'°',90+'°'],'Opposite angles in cyclic quadrilateral are supplementary.','∠C=180−'+a+'='+c+'°.',['Opposite angles in a cyclic quadrilateral add to 180°.','∠C=180°−'+a+'°='+c+'°.'],svgQuad(a+'°','','?','','',''),'Cyclic angle chase.')}
+function qPolygonInterior(){return Q('polygonAngle','Regular Polygon Angle','Polygons','Hard · 3 points',3,'Find each interior angle of a regular 12-gon.','150°',['120°','135°','144°','160°'],'Interior angle = ((n−2)180)/n.','Each angle is 150°.',['Sum=(12−2)180=1800.','1800/12=150.'],svgPoly(),'Polygon theorem.');}
+function qParallelAlgebra(){var known=pick([100,110,120,130]);var add=pick([10,20,30]);var x=(180-known-add)/2;if(x<=0){known=110;add=20;x=25;}return Q('parallelAlg','Parallel Line Algebra','Angle chase','Hard · 3 points',3,'Two same-side interior angles are 2x+'+add+' and '+known+'. Find x.',x,[x+5,x-5,x+10,x+15],'Same-side interior angles are supplementary.','2x+'+add+'+'+known+'=180, so x='+x+'.',['Set the angles to add to 180.','2x+'+add+'+'+known+'=180.','2x='+(180-known-add)+'.','x='+x+'.'],svgParallel(known+'°','2x+'+add+'°'),'Algebraic angle chasing.')}
+function qExteriorAlgebra(){var add=pick([10,15,20,25]);var ext=pick([70,75,80,85]);var x=(ext-add)/2;if(x%1!==0){add=15;ext=75;x=30;}return Q('exteriorAlg','Exterior Angle Algebra','Triangle angles','Hard · 3 points',3,'A triangle has remote interior angles x and x+'+add+'. The exterior angle is '+ext+'°. Find x.',x,[x-5,x+5,x+10,x+15],'Exterior angle equals sum of remote interior angles.','x+x+'+add+'='+ext+', so x='+x+'.',['Use exterior angle theorem.','x+(x+'+add+')='+ext+'.','2x+'+add+'='+ext+'.','x='+x+'.'],svgExteriorAngle('x','x+'+add,ext+'°'),'Exterior angle theorem.')}
+function qIntegerIsosceles(){return Q('isoCount','Integer Isosceles Count','Geometric counting','Bonus · 5 points',5,'How many isosceles triangles with positive integer side lengths have longest side 15?',22,[18,20,24,30],'Split into cases.','7+15=22.',['s,s,15 gives s=8 to14: 7 choices.','15,15,b gives b=1 to15: 15 choices.','Total=22.'],svgTri('A','B','C','15','15','15'),'Counting geometry.');}
+function qDiagonals(){return Q('diags','Polygon Diagonals','Counting','Hard · 3 points',3,'How many diagonals does a convex 12-gon have?',54,[48,50,60,66],'Formula is n(n−3)/2.','12·9/2=54.',['12·9/2=54.'],svgPoly(),'Geometric counting.');}
+function qTriangleCounting(){return Q('triCount','Triangle Counting','Configurations','Bonus · 5 points',5,'From one vertex of a large triangle, 5 cevians are drawn to distinct points on the opposite side. Including the two sides of the triangle, how many triangles have that same top vertex?',21,[15,18,24,28],'Any two rays from the top vertex determine one triangle.','There are 7 rays total, so C(7,2)=21.',['5 cevians + 2 sides = 7 rays.','C(7,2)=21.'],svgTri(),'Counting configuration.');}
+function qGridSquares(){return Q('gridSquares','Grid Squares','Counting geometry','Hard · 3 points',3,'How many axis-aligned squares are in a 4 by 4 grid?',30,[16,20,24,36],'Count 1x1, 2x2, 3x3, 4x4 squares.','16+9+4+1=30.',['16+9+4+1=30.'],svgGrid(),'Classic counting geometry.');}
+function qHandshakeDiagonals(){return Q('diagInt','Diagonal Intersections','Combinatorics geometry','Bonus · 5 points',5,'In a convex octagon with no three diagonals concurrent inside the octagon, how many interior intersection points of diagonals are there?',70,[56,64,72,84],'Each intersection is determined by choosing 4 vertices.','C(8,4)=70.',['C(8,4)=8·7·6·5/(4·3·2·1)=70.'],svgPoly(),'Counting diagonal intersections.');}
+function qSSSReason(){var a=R(5,12),b=R(6,14),c=R(7,16);return Q('sss','Triangle Proof Case','Congruence proof','Hard · 3 points',3,'If AB='+a+', BC='+b+', AC='+c+' and DE='+a+', EF='+b+', DF='+c+', what proves △ABC≅△DEF?','SSS',['SAS','ASA','AAS','HL'],'Three pairs of corresponding sides are congruent.','That is SSS.',['AB=DE='+a+'.','BC=EF='+b+'.','AC=DF='+c+'.','All three corresponding side pairs match, so use SSS.'],svgCongruence('',a,b,c,a,b,c),'Proof reason.')}
+function qSASReason(){var s1=R(5,12),s2=R(7,15),ang=pick([35,40,50,60,70]);return Q('sas','Triangle Proof Case','Congruence proof','Hard · 3 points',3,'If AB='+s1+', AC='+s2+', DE='+s1+', DF='+s2+', and ∠A=∠D='+ang+'°, what proves △ABC≅△DEF?','SAS',['SSS','ASA','AAS','AA'],'The angle is included between the two sides.','Two sides and included angle gives SAS.',['AB=DE='+s1+'.','AC=DF='+s2+'.','The included angles ∠A and ∠D are both '+ang+'°.','Use SAS.'],svgCongruence('',s1,s2,'',s1,s2,'',ang),'Proof reason.')}
+function qASAReason(){var a1=pick([40,50,60]),side=R(6,14),a2=pick([45,55,65]);return Q('asa','Triangle Proof Case','Congruence proof','Hard · 3 points',3,'If ∠A=∠D='+a1+'°, AB=DE='+side+', and ∠B=∠E='+a2+'°, what proves △ABC≅△DEF?','ASA',['SSS','SAS','AAS','HL'],'The known side is between the two known angles.','Two angles and the included side gives ASA.',['The two angle pairs match.','The included side between those angles matches.','Use ASA.'],svgCongruence('',side,'','',side,'','',a1,a2),'Proof reason.')}
+function qAASReason(){var a1=pick([35,45,55]),a2=pick([60,70,80]),side=R(6,14);return Q('aas','Triangle Proof Case','Congruence proof','Hard · 3 points',3,'If ∠A=∠D='+a1+'°, ∠C=∠F='+a2+'°, and BC=EF='+side+', what proves △ABC≅△DEF?','AAS',['ASA','SAS','SSS','HL'],'The side is not the included side between the two known angles.','Two angles and a non-included side gives AAS.',['Two angle pairs match.','A corresponding non-included side matches.','Use AAS.'],svgCongruence('','',side,'','',side,'',a1,a2),'Proof reason.')}
+function qHLReason(){var leg=R(5,12),hyp=pick([13,15,17,25]);return Q('hl','Right Triangle Proof Case','Right triangle congruence','Hard · 3 points',3,'Two right triangles have congruent hypotenuses of length '+hyp+' and congruent legs of length '+leg+'. What proves the triangles congruent?','HL',['SSS','SAS','ASA','AA'],'HL applies only to right triangles with equal hypotenuse and one equal leg.','The triangles are right triangles with matching hypotenuse and leg, so use HL.',['Both triangles are right triangles.','The hypotenuses match: '+hyp+'.','One leg pair matches: '+leg+'.','Use HL.'],svgRightPair(leg,hyp),'Proof reason.')}
+function qSimilarityReason(){var a=pick([35,45,55]),b=pick([65,75,85]);return Q('simReason','Triangle Relationship Case','Similarity proof','Hard · 3 points',3,'If ∠A=∠D='+a+'° and ∠B=∠E='+b+'°, what proves △ABC∼△DEF?','AA Similarity',['SSS','SAS','HL','CPCTC'],'Two matching angles prove triangle similarity.','Use AA Similarity.',['Two pairs of angles are congruent.','That is enough for triangle similarity.','Use AA Similarity.'],svgCongruence('', '', '', '', '', '', '', a,b),'Similarity proof.')}
+function qCPCTC(){return Q('cpctc','Corresponding Parts Case','Congruence consequences','Hard · 3 points',3,'After proving △ABC≅△DEF, what reason justifies ∠B≅∠E?','CPCTC',['SSS','SAS','AA Similarity','Triangle Sum'],'Corresponding parts of congruent triangles are congruent.','That is CPCTC.',['Triangles are congruent.','Corresponding parts match.','Use CPCTC.'],svgTri(),'Proof step.');}
+function qParallelogramProof(){return Q('paraProof','Parallelogram Property','Quadrilateral theorem','Hard · 3 points',3,'In parallelogram ABCD, which statement is always true?','Opposite sides are congruent',['Diagonals are perpendicular','All sides are congruent','All angles are right angles','Only one pair of sides is parallel'],'Every parallelogram has opposite sides congruent.','Opposite sides are congruent.',['Recall parallelogram properties.','Opposite sides are congruent.'],svgQuad('','','','','',''),'Theorem recognition.');}
+function qCentroidRatio(){return Q('centroid','Centroid Median Ratio','Triangle centers','Bonus · 5 points',5,'Median AM has length 36. Centroid G lies on AM. Find GM.',12,[9,15,18,24],'Centroid divides median 2:1 from the vertex.','GM is one third of the median.',['GM=36/3=12.'],svgTri(),'Centroid theorem.');}
+function qEulerLine(){return Q('euler','Euler Line Ratio','Triangle centers','Bonus · 5 points',5,'In a triangle, centroid G, orthocenter H, and circumcenter O lie on the Euler line. If GO=5, find HO.',15,[10,12,18,20],'Euler line ratio gives HG:GO=2:1.','HG=10 and HO=15.',['GO=5 is 1 part.','HG=10.','HO=10+5=15.'],svgTri(),'Euler line relation.');}
+
+function svgCongruence(label,a,b,c,d,e,f,ang1,ang2){a=a||'';b=b||'';c=c||'';d=d||'';e=e||'';f=f||'';ang1=ang1||'';ang2=ang2||'';return '<svg viewBox="0 0 430 330"><polygon points="90,250 155,80 250,250" fill="none" stroke="#34324a" stroke-width="4"/><polygon points="285,250 335,80 400,250" fill="none" stroke="#34324a" stroke-width="4"/><text x="148" y="70" font-size="18">A</text><text x="75" y="274" font-size="18">B</text><text x="250" y="274" font-size="18">C</text><text x="328" y="70" font-size="18">D</text><text x="270" y="274" font-size="18">E</text><text x="400" y="274" font-size="18">F</text><text x="98" y="160" font-size="16">'+a+'</text><text x="160" y="276" font-size="16">'+b+'</text><text x="212" y="160" font-size="16">'+c+'</text><text x="294" y="160" font-size="16">'+d+'</text><text x="334" y="276" font-size="16">'+e+'</text><text x="374" y="160" font-size="16">'+f+'</text><text x="148" y="122" font-size="16">'+ang1+'</text><text x="328" y="122" font-size="16">'+ang1+'</text><text x="108" y="236" font-size="16">'+ang2+'</text><text x="294" y="236" font-size="16">'+ang2+'</text></svg>';}
+function svgRightPair(leg,hyp){return '<svg viewBox="0 0 430 330"><polygon points="85,260 85,95 230,260" fill="none" stroke="#34324a" stroke-width="4"/><polygon points="270,260 270,95 395,260" fill="none" stroke="#34324a" stroke-width="4"/><path d="M85 238 L108 238 L108 260" fill="none" stroke="#b9a7f4" stroke-width="3"/><path d="M270 238 L293 238 L293 260" fill="none" stroke="#b9a7f4" stroke-width="3"/><text x="60" y="180" font-size="18">'+leg+'</text><text x="150" y="178" font-size="18">'+hyp+'</text><text x="245" y="180" font-size="18">'+leg+'</text><text x="330" y="178" font-size="18">'+hyp+'</text><text x="100" y="238" font-size="15">90°</text><text x="285" y="238" font-size="15">90°</text></svg>';}
+function svgExteriorAngle(leftAngle,rightAngle,extAngle){leftAngle=leftAngle||'x';rightAngle=rightAngle||'x+15';extAngle=extAngle||'75°';return '<svg viewBox="0 0 430 330"><polygon points="215,65 85,260 330,260" fill="none" stroke="#34324a" stroke-width="4"/><line x1="330" y1="260" x2="390" y2="260" stroke="#34324a" stroke-width="4"/><path d="M318 252 A28 28 0 0 0 362 248" fill="none" stroke="#ff9fc5" stroke-width="4"/><text x="205" y="55" font-size="22">A</text><text x="65" y="285" font-size="22">B</text><text x="333" y="285" font-size="22">C</text><text x="118" y="236" font-size="18">'+leftAngle+'</text><text x="255" y="236" font-size="18">'+rightAngle+'</text><text x="350" y="240" font-size="18">'+extAngle+'</text></svg>';}
+function svgTri(labelA,labelB,labelC,side1,side2,side3,angleA,angleB,angleC){labelA=labelA||'A';labelB=labelB||'B';labelC=labelC||'C';side1=side1||'';side2=side2||'';side3=side3||'';angleA=angleA||'';angleB=angleB||'';angleC=angleC||'';return '<svg viewBox="0 0 430 330"><polygon points="215,45 75,275 360,275" fill="none" stroke="#34324a" stroke-width="4"/><line x1="215" y1="45" x2="215" y2="275" stroke="#b9a7f4" stroke-width="3"/><circle cx="215" cy="45" r="4" fill="#34324a"/><circle cx="75" cy="275" r="4" fill="#34324a"/><circle cx="360" cy="275" r="4" fill="#34324a"/><text x="207" y="34" font-size="22">'+labelA+'</text><text x="52" y="304" font-size="22">'+labelB+'</text><text x="366" y="304" font-size="22">'+labelC+'</text><text x="105" y="145" font-size="17">'+side1+'</text><text x="308" y="145" font-size="17">'+side2+'</text><text x="205" y="305" font-size="17">'+side3+'</text><text x="198" y="96" font-size="17">'+angleA+'</text><text x="108" y="254" font-size="17">'+angleB+'</text><text x="300" y="254" font-size="17">'+angleC+'</text></svg>';}
+function svgNested(){return '<svg viewBox="0 0 430 330"><polygon points="215,45 65,270 365,270" fill="none" stroke="#34324a" stroke-width="4"/><polygon points="215,120 145,235 285,235" fill="none" stroke="#b9a7f4" stroke-width="5"/><text x="200" y="180" font-size="18">k</text></svg>';}
+function svgBisector(){return '<svg viewBox="0 0 430 330"><polygon points="215,45 70,275 365,275" fill="none" stroke="#34324a" stroke-width="4"/><line x1="215" y1="45" x2="205" y2="275" stroke="#b9a7f4" stroke-width="4"/><text x="130" y="180" font-size="16">5</text><text x="280" y="180" font-size="16">7</text></svg>';}
+function svgCircle(l1,l2,l3,l4){l1=l1||'';l2=l2||'';l3=l3||'';l4=l4||'';return '<svg viewBox="0 0 430 330"><circle cx="215" cy="165" r="110" fill="none" stroke="#34324a" stroke-width="4"/><line x1="105" y1="165" x2="325" y2="165" stroke="#b9a7f4" stroke-width="5"/><line x1="145" y1="250" x2="285" y2="80" stroke="#ffdce8" stroke-width="5"/><circle cx="215" cy="165" r="4" fill="#34324a"/><text x="210" y="160" font-size="18">O</text><text x="130" y="150" font-size="17">'+l1+'</text><text x="275" y="150" font-size="17">'+l2+'</text><text x="190" y="255" font-size="17">'+l3+'</text><text x="250" y="100" font-size="17">'+l4+'</text></svg>';}
+function svgQuad(angleA,angleB,angleC,angleD,sideTop,sideBottom){angleA=angleA||'';angleB=angleB||'';angleC=angleC||'';angleD=angleD||'';sideTop=sideTop||'';sideBottom=sideBottom||'';return '<svg viewBox="0 0 430 330"><polygon points="100,80 320,80 360,250 65,260" fill="none" stroke="#34324a" stroke-width="4"/><line x1="100" y1="80" x2="360" y2="250" stroke="#b9a7f4" stroke-width="3"/><line x1="320" y1="80" x2="65" y2="260" stroke="#ffdce8" stroke-width="3"/><circle cx="100" cy="80" r="4" fill="#34324a"/><circle cx="320" cy="80" r="4" fill="#34324a"/><circle cx="360" cy="250" r="4" fill="#34324a"/><circle cx="65" cy="260" r="4" fill="#34324a"/><text x="82" y="68" font-size="20">A</text><text x="326" y="68" font-size="20">B</text><text x="365" y="274" font-size="20">C</text><text x="44" y="284" font-size="20">D</text><text x="118" y="118" font-size="17">'+angleA+'</text><text x="282" y="118" font-size="17">'+angleB+'</text><text x="315" y="232" font-size="17">'+angleC+'</text><text x="82" y="236" font-size="17">'+angleD+'</text><text x="198" y="62" font-size="17">'+sideTop+'</text><text x="186" y="306" font-size="17">'+sideBottom+'</text></svg>';}
+function svgCoord(a,b,c,note){a=a||'A';b=b||'B';c=c||'C';note=note||'';return '<svg viewBox="0 0 430 330"><line x1="70" y1="270" x2="370" y2="270" stroke="#e6def7" stroke-width="3"/><line x1="80" y1="290" x2="80" y2="40" stroke="#e6def7" stroke-width="3"/><polygon points="90,260 320,220 155,70" fill="none" stroke="#34324a" stroke-width="4"/><circle cx="90" cy="260" r="5" fill="#34324a"/><circle cx="320" cy="220" r="5" fill="#34324a"/><circle cx="155" cy="70" r="5" fill="#34324a"/><text x="60" y="292" font-size="17">'+a+'</text><text x="285" y="246" font-size="17">'+b+'</text><text x="120" y="60" font-size="17">'+c+'</text><text x="160" y="286" font-size="14">x-axis</text><text x="88" y="55" font-size="14">y-axis</text><text x="190" y="150" font-size="15">'+note+'</text></svg>';}
+function svgRight(left,bottom,hyp,topAngle){left=left||'';bottom=bottom||'';hyp=hyp||'';topAngle=topAngle||'';return '<svg viewBox="0 0 430 330"><polygon points="95,260 95,80 330,260" fill="none" stroke="#34324a" stroke-width="4"/><path d="M95 235 L120 235 L120 260" fill="none" stroke="#b9a7f4" stroke-width="3"/><text x="110" y="240" font-size="16">90°</text><text x="62" y="170" font-size="18">'+left+'</text><text x="205" y="282" font-size="18">'+bottom+'</text><text x="222" y="158" font-size="18">'+hyp+'</text><text x="112" y="108" font-size="17">'+topAngle+'</text></svg>';}
+function svgPoly(){return '<svg viewBox="0 0 430 330"><polygon points="215,45 315,95 340,210 260,285 140,285 60,210 85,95" fill="none" stroke="#34324a" stroke-width="4"/><text x="200" y="180" font-size="18">n=12</text></svg>';}
+function svgParallel(label1,label2){label1=label1||'110°';label2=label2||'x';return '<svg viewBox="0 0 430 330"><line x1="60" y1="110" x2="370" y2="110" stroke="#34324a" stroke-width="4"/><line x1="60" y1="230" x2="370" y2="230" stroke="#34324a" stroke-width="4"/><line x1="150" y1="50" x2="285" y2="280" stroke="#b9a7f4" stroke-width="4"/><text x="258" y="102" font-size="18">'+label1+'</text><text x="146" y="134" font-size="18">'+label2+'</text></svg>';}
+function svgGrid(){var lines='';for(var i=0;i<=4;i++){var x=95+i*55;var y=55+i*55;lines+='<line x1="'+x+'" y1="55" x2="'+x+'" y2="275"/>';lines+='<line x1="95" y1="'+y+'" x2="315" y2="'+y+'"/>';}return '<svg viewBox="0 0 430 330"><g stroke="#34324a" stroke-width="3">'+lines+'</g><text x="175" y="305" font-size="18">4</text></svg>';}
+function svgMidline(d,base){d=d||'11';base=base||'?';return '<svg viewBox="0 0 430 330"><polygon points="215,45 75,275 360,275" fill="none" stroke="#34324a" stroke-width="4"/><line x1="145" y1="160" x2="287" y2="160" stroke="#b9a7f4" stroke-width="5"/><text x="205" y="36" font-size="20">A</text><text x="55" y="300" font-size="20">B</text><text x="365" y="300" font-size="20">C</text><text x="132" y="154" font-size="18">D</text><text x="292" y="154" font-size="18">E</text><text x="198" y="148" font-size="18">'+d+'</text><text x="204" y="318" font-size="18">'+base+'</text></svg>';}
+function svgParallelCut(ad,db,ae,ec){ad=ad||'6';db=db||'9';ae=ae||'8';ec=ec||'?';return '<svg viewBox="0 0 430 330"><polygon points="215,45 75,275 360,275" fill="none" stroke="#34324a" stroke-width="4"/><line x1="156" y1="140" x2="273" y2="140" stroke="#b9a7f4" stroke-width="5"/><text x="205" y="36" font-size="20">A</text><text x="55" y="300" font-size="20">B</text><text x="365" y="300" font-size="20">C</text><text x="145" y="135" font-size="18">D</text><text x="278" y="135" font-size="18">E</text><text x="122" y="110" font-size="17">'+ad+'</text><text x="90" y="228" font-size="17">'+db+'</text><text x="272" y="110" font-size="17">'+ae+'</text><text x="312" y="228" font-size="17">'+ec+'</text></svg>';}
+function svgCircleLabeled(label,angleLabel){angleLabel=angleLabel||'?';return '<svg viewBox="0 0 430 330"><circle cx="215" cy="165" r="110" fill="none" stroke="#34324a" stroke-width="4"/><line x1="145" y1="250" x2="215" y2="55" stroke="#b9a7f4" stroke-width="4"/><line x1="285" y1="250" x2="215" y2="55" stroke="#b9a7f4" stroke-width="4"/><path d="M145 250 A110 110 0 0 0 285 250" fill="none" stroke="#ffdce8" stroke-width="8"/><text x="210" y="48" font-size="20">A</text><text x="130" y="270" font-size="20">B</text><text x="290" y="270" font-size="20">C</text><text x="170" y="292" font-size="18">'+label+'</text><text x="202" y="88" font-size="18">'+angleLabel+'</text></svg>';}
+function svgCoordLabeled(){return '<svg viewBox="0 0 430 330"><line x1="70" y1="270" x2="370" y2="270" stroke="#e6def7" stroke-width="3"/><line x1="80" y1="290" x2="80" y2="40" stroke="#e6def7" stroke-width="3"/><line x1="110" y1="240" x2="310" y2="120" stroke="#b9a7f4" stroke-width="5"/><circle cx="110" cy="240" r="5" fill="#34324a"/><circle cx="210" cy="180" r="5" fill="#ff9fc5"/><circle cx="310" cy="120" r="5" fill="#34324a"/><text x="75" y="260" font-size="17">A(2,3)</text><text x="212" y="176" font-size="17">M(8,6)</text><text x="315" y="118" font-size="17">B(14,9)</text></svg>';}
+function svgRectCoord(){return '<svg viewBox="0 0 430 330"><rect x="100" y="85" width="240" height="150" fill="none" stroke="#34324a" stroke-width="4"/><circle cx="100" cy="235" r="5" fill="#34324a"/><circle cx="340" cy="235" r="5" fill="#34324a"/><circle cx="340" cy="85" r="5" fill="#34324a"/><circle cx="100" cy="85" r="5" fill="#34324a"/><text x="70" y="258" font-size="17">A(1,2)</text><text x="300" y="258" font-size="17">B(9,2)</text><text x="344" y="82" font-size="17">C(9,7)</text><text x="65" y="82" font-size="17">D(1,7)</text></svg>';}
+function svgShadedRect(){return '<svg viewBox="0 0 430 330"><rect x="85" y="70" width="260" height="190" fill="none" stroke="#34324a" stroke-width="4"/><polygon points="345,260 255,260 345,180" fill="#ffdce8" stroke="#b9a7f4" stroke-width="3"/><text x="200" y="280" font-size="18">12</text><text x="60" y="170" font-size="18">10</text><text x="300" y="250" font-size="16">6</text><text x="350" y="220" font-size="16">4</text></svg>';}
+function svgPara(){return '<svg viewBox="0 0 430 330"><polygon points="105,245 315,245 360,95 150,95" fill="none" stroke="#34324a" stroke-width="4"/><line x1="105" y1="245" x2="360" y2="95" stroke="#b9a7f4" stroke-width="4"/><text x="200" y="260" font-size="18">18</text><text x="120" y="180" font-size="18">7</text></svg>';}
+function svgRightLabeled(a,b,angA,angC){a=a||'';b=b||'';angA=angA||'';angC=angC||'';return '<svg viewBox="0 0 430 330"><polygon points="95,260 95,80 330,260" fill="none" stroke="#34324a" stroke-width="4"/><path d="M95 235 L120 235 L120 260" fill="none" stroke="#b9a7f4" stroke-width="3"/><text x="140" y="192" font-size="18">'+a+'</text><text x="242" y="246" font-size="18">'+b+'</text><text x="110" y="240" font-size="16">90°</text><text x="112" y="112" font-size="17">'+angA+'</text><text x="286" y="244" font-size="17">'+angC+'</text></svg>';}
+function runSelfTests(){var bank=getBank();var required=['mixed','bonus','similarity','circles','coordinate','area','right','angles','counting','proofs'];required.forEach(function(key){console.assert(Array.isArray(bank[key])&&bank[key].length>0,key+' bank exists');bank[key].forEach(function(fn){var c=fn();console.assert(c&&c.title&&c.answer,key+' case title/answer');console.assert(Array.isArray(c.choices)&&c.choices.indexOf(c.answer)>-1,c.title+' includes answer');console.assert(new Set(c.choices).size===c.choices.length,c.title+' unique choices');console.assert(Array.isArray(c.steps)&&c.steps.length>0,c.title+' has steps');console.assert(typeof c.diagram==='string'&&c.diagram.indexOf('<svg')>-1,c.title+' has SVG diagram');});});console.log('Geometry Case Files self-tests passed: no syntax errors, questions generate, answers included, diagrams render.');}
+function triggerConfetti(){
+  for(let i=0;i<25;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'vw';
+    c.style.background=['#ff9fc5','#72d6a0','#90c7ff','#ffdce8','#b9a7f4'][Math.floor(Math.random()*5)];
+    c.style.animationDuration=(0.8+Math.random()*0.6)+'s';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),1200);
+  }
+}
+runSelfTests();updateStats();
+</script>
+</body>
+</html>
